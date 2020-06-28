@@ -1,0 +1,7 @@
+{
+  "name": "AlleAngeln",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
