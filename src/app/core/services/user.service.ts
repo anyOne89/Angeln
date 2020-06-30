@@ -1,12 +1,6 @@
 import {Injectable, NgZone} from '@angular/core';
-import {HttpParams} from '@angular/common/http';
-import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-
-import {ApiService} from './api.service';
-
-import {distinctUntilChanged, map} from 'rxjs/operators';
-import {Buffer} from 'buffer';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {Observable} from 'rxjs';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase';
@@ -15,39 +9,56 @@ import * as firebase from 'firebase';
 @Injectable()
 export class UserService {
 
+    userData: any;
     user: Observable<firebase.User>;
 
-    private currentUserSubject = new BehaviorSubject<User>({} as User);
-    public currentUser = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
-
-    private isAuthenticatedSubject: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
-    public isAuthenticated: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
+    // private currentUserSubject = new BehaviorSubject<User>({} as User);
+    // public currentUser = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
+    //
+    // private isAuthenticatedSubject: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+    // public isAuthenticated: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
 
     constructor(
-        private apiService: ApiService,
-        private credentialsService: CredentialsService,
-        private authService: AuthService,
-        public afStore: AngularFirestore, public ngFireAuth: AngularFireAuth, public router: Router, public ngZone: NgZone
+        public afStore: AngularFirestore,
+        public ngFireAuth: AngularFireAuth,
+        public router: Router,
+        public ngZone: NgZone
     ) {
+
+        this.ngFireAuth.authState.subscribe(user => {
+            if (user) {
+                this.userData = user;
+                localStorage.setItem('user', JSON.stringify(this.userData));
+                JSON.parse(localStorage.getItem('user'));
+            } else {
+                localStorage.setItem('user', null);
+                JSON.parse(localStorage.getItem('user'));
+            }
+        });
 
     }
 
 
     // EMAIL & PW
-    signup(email: string, password: string) {
-        this.ngFireAuth
-            .createUserWithEmailAndPassword(email, password)
-            .then(value => {
+    signup(email: string, password: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+
+            this.ngFireAuth.createUserWithEmailAndPassword(email, password).then(value => {
                 console.log('Success!', value);
-            })
-            .catch(err => {
+                resolve(value);
+            }).catch(err => {
                 console.log('Something went wrong:', err.message);
             });
+        });
+    }
+
+    // Register user with email/password
+    registerUser(email, password) {
+        return this.ngFireAuth.auth.createUserWithEmailAndPassword(email, password)
     }
 
     login(email: string, password: string) {
-        this.ngFireAuth
-            .signInWithEmailAndPassword(email, password)
+        this.ngFireAuth.signInWithEmailAndPassword(email, password)
             .then(value => {
                 console.log('Nice, it worked!');
             })
@@ -56,65 +67,63 @@ export class UserService {
             });
     }
 
-
-    logout() {
-        this.ngFireAuth.signOut();
-    }
-
-
-    populate() {
-
-        if (this.credentialsService.getToken()) {
-            this.setAuth(this.credentialsService.getToken());
-        } else {
-            this.purgeAuth();
+    // Store user in localStorage
+    setUserData(user) {
+        const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.uid}`);
+        const userData: User = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            emailVerified: user.emailVerified
         }
+        return userRef.set(userData, {
+            merge: true
+        })
+    }
+
+    // Sign-out
+    signOut() {
+        return this.ngFireAuth.auth.signOut().then(() => {
+            localStorage.removeItem('user');
+            this.router.navigate(['login']);
+        })
     }
 
 
-    /**Remove any potential remnants of previous auth states */
-    purgeAuth() {
-        this.credentialsService.destroyToken();
-        // Set current user to an empty object
-        this.currentUserSubject.next({} as User);
-        // Set auth status to false
-        this.isAuthenticatedSubject.next(false);
-
-        this.authService.isAuthRunning.next(false);
+    // Recover password
+    PasswordRecover(passwordResetEmail) {
+        return this.ngFireAuth.sendPasswordResetEmail(passwordResetEmail)
+            .then(() => {
+                window.alert('Password reset email has been sent, please check your inbox.');
+            }).catch((error) => {
+                window.alert(error)
+            })
     }
 
-    attemptAuth(type: string, credentials: string): Observable<any> {
-        this.authService.isAuthRunning.next(true);
-        const route = (type === 'login') ? '/checkAuth' : '';
-
-        const params = new HttpParams()
-            .set('auth', credentials)
-            .set('timestamp', new Date().getMilliseconds().toString())
-            .set('jiraRestApiUrl', getDefaultJiraConfig().root + 'rest/');
-
-        return this.apiService.getResponseTypeText(`/api` + route, params)
-            .pipe(map(
-                data => {
-                    this.authService.isAuthRunning.next(false);
-                    if (!this.credentialsService.getToken()) {
-                        this.setAuth(credentials);
-                    }
-                }
-            ));
+    // Returns true when user is looged in
+    get isLoggedIn(): boolean {
+        const user = JSON.parse(localStorage.getItem('user'));
+        return (user !== null && user.emailVerified !== false) ? true : false;
     }
 
-    setAuth(credentials: string) {
-        const codedCredentials = new Buffer(credentials, 'base64').toString();
-        const cred = codedCredentials.split(':');
-
-        this.credentialsService.saveCredentials(credentials);
-        // Set current user data into observable
-        this.currentUserSubject.next(new User(cred[0]));
-        // Set isAuthenticated to true
-        this.isAuthenticatedSubject.next(true);
+    // Returns true when user's email is verified
+    get isEmailVerified(): boolean {
+        const user = JSON.parse(localStorage.getItem('user'));
+        return (user.emailVerified !== false) ? true : false;
     }
 
-    getCurrentUser(): Observable<User> {
-        return this.currentUser;
+    // Email verification when new user register
+    SendVerificationMail() {
+        return this.ngFireAuth.auth.currentUser.sendEmailVerification()
+            .then(() => {
+                this.router.navigate(['verify-email']);
+            })
+    }
+
+
+    // Sign in with Gmail
+    GoogleAuth() {
+        return this.AuthLogin(new auth.GoogleAuthProvider());
     }
 }

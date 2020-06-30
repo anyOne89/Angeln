@@ -3,9 +3,13 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 const routes = [
     {
+        path: 'login',
+        loadChildren: () => import('./auth/auth-page.module').then(m => m.AuthPageModule),
+    },
+    {
         path: '',
-        loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
-    }
+        loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
+    },
 ];
 let AppRoutingModule = class AppRoutingModule {
 };

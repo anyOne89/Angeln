@@ -1,4 +1,4 @@
-export interface User {
+export interface Wetter {
     uid: string;
     email: string;
     firstName: string;

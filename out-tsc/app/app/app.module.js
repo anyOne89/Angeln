@@ -7,14 +7,27 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireModule } from '@angular/fire';
+import { FormsModule } from '@angular/forms';
+import { UserService } from './auth/user.service';
+import { firebaseConfig } from '../environments/environment';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     NgModule({
         declarations: [AppComponent],
         entryComponents: [],
-        imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+        imports: [BrowserModule, FormsModule, IonicModule.forRoot(), AppRoutingModule,
+            AngularFireAuthModule,
+            AngularFireDatabaseModule,
+            AngularFirestoreModule,
+            AngularFireModule.initializeApp(firebaseConfig)
+        ],
         providers: [
+            UserService,
             StatusBar,
             SplashScreen,
             { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

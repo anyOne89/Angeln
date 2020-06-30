@@ -4,15 +4,14 @@ import {AuthComponent} from './auth.component';
 import {NoAuthGuard} from './no-auth-guard.service';
 
 const routes: Routes = [
-  {
-    path: 'login', component: AuthComponent, canActivate: [NoAuthGuard]
-  },
-  {path: '**', redirectTo: 'login'}, // wild card to redirect unknown params
+    {
+        path: 'login', component: AuthComponent, canActivate: [NoAuthGuard]
+    },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class AuthRoutingModule {
 }

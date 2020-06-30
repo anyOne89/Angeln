@@ -1,4 +1,4 @@
-export interface User {
+export interface Fang {
     uid: string;
     email: string;
     firstName: string;
