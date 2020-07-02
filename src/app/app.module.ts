@@ -15,7 +15,7 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireModule} from '@angular/fire';
 
 import {FormsModule} from '@angular/forms';
-import {UserService} from './auth/user.service';
+import {UserService} from './core/services/user.service';
 import {firebaseConfig} from '../environments/environment';
 
 @NgModule({

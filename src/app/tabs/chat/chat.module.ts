@@ -3,20 +3,18 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab4Page } from './tab4.page';
+import { ChatComponent } from './chat.component';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
-import { Tab4PageRoutingModule } from './tab4-routing.module';
+import { ChatPageRoutingModule } from './chat-routing.module';
 
 @NgModule({
   imports: [
     IonicModule,
-    CommonModule,
-    FormsModule,
+    RouterModule.forChild([{path: '', component: ChatComponent}]),
+    ChatPageRoutingModule,
     ExploreContainerComponentModule,
-    RouterModule.forChild([{ path: '', component: Tab4Page }]),
-    Tab4PageRoutingModule,
   ],
-  declarations: [Tab4Page]
+  declarations: [ChatComponent]
 })
-export class MeinsPageModule {}
+export class ChatPageModule {}

@@ -16,15 +16,15 @@ export class AuthComponent implements OnInit {
 
 
     logIn(email, password) {
-        this.userService.signup(email, password).then((res) => {
-            if (this.userService.isEmailVerified) {
-                this.router.navigate(['']);
-            } else {
-                window.alert('Email is not verified')
-                return false;
-            }
+        this.userService.login(email, password).then((res) => {
+            // if (this.userService.isEmailVerified) {
+            //     this.router.navigate(['']);
+            // } else {
+            //     window.alert('Email is not verified');
+            //     return false;
+            // }
         }).catch((error) => {
-            window.alert(error.message)
+            window.alert(error.message);
         });
     }
 }

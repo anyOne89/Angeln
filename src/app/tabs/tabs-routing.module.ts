@@ -13,15 +13,15 @@ const routes: Routes = [
             },
             {
                 path: 'tab2',
-                loadChildren: () => import('./gewässer/tab2.module').then(m => m.Tab2PageModule)
+                loadChildren: () => import('./gewässer/tab2.module').then(m => m.GewässerPageModule)
             },
             {
                 path: 'tab3',
-                loadChildren: () => import('./nachrichten/tab3.module').then(m => m.Tab3PageModule)
+                loadChildren: () => import('./chat/chat.module').then(m => m.ChatPageModule)
             },
             {
                 path: 'tab4',
-                loadChildren: () => import('./meins/tab4.module').then(m => m.Tab4PageModule)
+                loadChildren: () => import('./meins/tab4.module').then(m => m.MeinsPageModule)
             },
             {
                 path: '',
@@ -31,7 +31,7 @@ const routes: Routes = [
         ]
     },
     {
-        path: '',
+        path: 'tabs',
         redirectTo: '/tabs/tab1',
         pathMatch: 'full'
     }
