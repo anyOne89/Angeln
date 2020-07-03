@@ -17,15 +17,22 @@ import {AngularFireModule} from '@angular/fire';
 import {FormsModule} from '@angular/forms';
 import {UserService} from './core/services/user.service';
 import {firebaseConfig} from '../environments/environment';
-
+import {AuthPageModule} from './auth/auth-page.module';
 @NgModule({
     declarations: [AppComponent],
     entryComponents: [],
-    imports: [BrowserModule, FormsModule,  IonicModule.forRoot(), AppRoutingModule,
+    imports: [
+        BrowserModule,
+        FormsModule,
+        IonicModule.forRoot(),
         AngularFireAuthModule,
         AngularFireDatabaseModule,
         AngularFirestoreModule,
-        AngularFireModule.initializeApp(firebaseConfig)
+        AngularFireModule.initializeApp(firebaseConfig),
+
+        // modules
+        AppRoutingModule,
+        AuthPageModule,
     ],
 
 

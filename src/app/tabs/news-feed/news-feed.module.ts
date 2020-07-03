@@ -5,8 +5,8 @@ import {FormsModule} from '@angular/forms';
 import {NewsFeedPage} from './news-feed.page';
 import {ExploreContainerComponentModule} from '../explore-container/explore-container.module';
 
-import {Tab1PageRoutingModule} from './news-feed-routing.module';
-import {NewsCardContentComponent} from './card-content/news-card-content.component';
+import {NewsPageRoutingModule} from './news-feed-routing.module';
+import {NewsCardContentComponent} from './news-card-content/news-card-content.component';
 
 @NgModule({
     imports: [
@@ -14,7 +14,7 @@ import {NewsCardContentComponent} from './card-content/news-card-content.compone
         CommonModule,
         FormsModule,
         ExploreContainerComponentModule,
-        Tab1PageRoutingModule,
+        NewsPageRoutingModule,
     ],
     declarations: [NewsFeedPage, NewsCardContentComponent]
 })

@@ -1,22 +1,31 @@
 import {IonicModule} from '@ionic/angular';
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {AuthComponent} from './auth/auth.component';
+import {RouterModule, Routes} from '@angular/router';
+import {RegisterModule} from './auth/register/register.module';
 
-import {RegistrationPage} from './registration/register-page.component';
-import {AuthComponent} from './auth.component';
-import {AuthRoutingModule} from './auth-routing.module';
-import {RouterModule} from '@angular/router';
-import {ChatComponent} from '../tabs/chat/chat.component';
+
+const authRoutes: Routes = [
+    {
+        path: 'auth', component: AuthComponent
+    },
+    {
+        path: 'register',
+        loadChildren: () => import('./auth/register/register.module').then(m => m.RegisterModule)
+    }
+];
 
 @NgModule({
     imports: [
+        RouterModule.forChild(authRoutes),
+        RegisterModule,
         IonicModule,
-        CommonModule,
-        AuthRoutingModule,
-        RouterModule.forChild([{path: '', component: AuthComponent}]),
-
     ],
-    declarations: [AuthComponent]
+    declarations: [AuthComponent],
+    exports: [
+        RouterModule
+    ]
 })
 export class AuthPageModule {
 }
