@@ -38,22 +38,18 @@ export class UserService {
 
 
     // // EMAIL & PW
-    // signup(email: string, password: string): Promise<any> {
-    //     return new Promise((resolve, reject) => {
-    //
-    //         this.ngFireAuth.createUserWithEmailAndPassword(email, password).then(value => {
-    //             console.log('Success!', value);
-    //             resolve(value);
-    //         }).catch(err => {
-    //             console.log('Something went wrong:', err.message);
-    //         });
-    //     });
-    // }
-
-    // Register user with email/password
-    registerUser(email, password) {
-        return this.ngFireAuth.createUserWithEmailAndPassword(email, password);
+    signUp(email, password): Promise<UserCredential> {
+        return new Promise((resolve, reject) => {
+            this.ngFireAuth.createUserWithEmailAndPassword(email, password).then(value => {
+                this.SendVerificationMail().then(res => {
+                    resolve(value);
+                });
+            }).catch(err => {
+                console.log('Something went wrong:', err.message);
+            });
+        });
     }
+
 
     login(email: string, password: string): Promise<UserCredential> {
         return new Promise((resolve, reject) => {
@@ -79,14 +75,15 @@ export class UserService {
     //         merge: true
     //     })
     // }
-    //
-    // // Sign-out
-    // signOut() {
-    //     return this.ngFireAuth.auth.signOut().then(() => {
-    //         localStorage.removeItem('user');
-    //         this.router.navigate(['login']);
-    //     })
-    // }
+
+    // Sign-out
+    signOut() {
+        return this.ngFireAuth.signOut().then(() => {
+            localStorage.removeItem('user');
+            this.router.navigate(['login']);
+        });
+    }
+
     //
     //
     // // Recover password
@@ -100,16 +97,16 @@ export class UserService {
     // }
     //
     // // Returns true when user is looged in
-    // get isLoggedIn(): boolean {
-    //     const user = JSON.parse(localStorage.getItem('user'));
-    //     return (user !== null && user.emailVerified !== false) ? true : false;
-    // }
-    //
+    get isLoggedIn(): boolean {
+        const user = JSON.parse(localStorage.getItem('user'));
+        return (user !== null && user.emailVerified !== false) ? true : false;
+    }
+
     // // Returns true when user's email is verified
-     get isEmailVerified(): boolean {
-         const user = JSON.parse(localStorage.getItem('user'));
-         return (user.emailVerified !== false) ? true : false;
-     }
+    get isEmailVerified(): boolean {
+        const user = JSON.parse(localStorage.getItem('user'));
+        return (user.emailVerified !== false) ? true : false;
+    }
 
     signInWithGoogle() {
         const provider = new auth.GoogleAuthProvider();
@@ -136,19 +133,22 @@ export class UserService {
     }
 
 
+    // Email verification when new user register
+    SendVerificationMail() {
+        return this.ngFireAuth.currentUser.then(user => {
+            user.sendEmailVerification().then(res => {
 
-    //
-    // // Email verification when new user register
-    // SendVerificationMail() {
-    //     return this.ngFireAuth.auth.currentUser.sendEmailVerification()
-    //         .then(() => {
-    //             this.router.navigate(['verify-email']);
-    //         })
-    // }
-    //
-    //
-    // // Sign in with Gmail
-    // GoogleAuth() {
-    //     return this.ngFireAuth.AuthLogin(new auth.GoogleAuthProvider());
-    // }
+                this.router.navigate(['verify-email']);
+            });
+        });
+    }
+
+//
+//
+// // Sign in with Gmail
+// GoogleAuth() {
+//     return this.ngFireAuth.AuthLogin(new auth.GoogleAuthProvider());
+// }
+
+
 }
