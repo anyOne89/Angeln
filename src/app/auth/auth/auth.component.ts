@@ -19,11 +19,11 @@ export class AuthComponent implements OnInit {
     }
 
 
-    logIn(email, password) {
-        this.userService.login(email, password).then((res) => {
+    logIn(email: IonInput, password: IonInput) {
+        this.userService.login(email.value, password.value).then((res) => {
             console.log('working');
             // if (this.userService.isEmailVerified) {
-            //     //this.router.navigate(['tabs']);
+            this.router.navigate(['tabs']);
             //     window.alert('working');
             //     console.log('working');
             // } else {

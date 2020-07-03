@@ -51,7 +51,7 @@ export class UserService {
     }
 
 
-    login(email: string, password: string): Promise<UserCredential> {
+    login(email, password): Promise<UserCredential> {
         return new Promise((resolve, reject) => {
             this.ngFireAuth.signInWithEmailAndPassword(email, password).then(value => {
                 console.log('Nice, it worked!');
