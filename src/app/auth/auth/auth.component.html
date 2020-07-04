@@ -24,26 +24,28 @@
     </div>
 
 
-    <ion-button  (click)="goToRegisterPage()" >Register</ion-button>
+    <ion-button (click)="goToRegisterPage()">Register</ion-button>
+
+    <!--    WORKING!!!!-->
+    <!--    <ion-button  (click)="userService.PasswordRecover('j.just2002@gmail.com')" >Reset Password</ion-button>-->
+
+    <!-- Calling GoogleAuth() Api from AuthService -->
+    <div class="formGroup">
+        <button type="button" (click)="userService.GoogleAuth()">
+
+            <i class="fa fa-google" aria-hidden="true"></i>
+
+            Log in with Google
+        </button>
+    </div>
+
+
 </ion-content>
 
 
 
 
 
-<!--<ion-content>-->
-<!--    <form>-->
-<!--        <ion-row>-->
-<!--            <ion-col>-->
-<!--                <ion-button-->
-<!--                        type="submit"-->
-<!--                        color="danger"-->
-<!--                        (click)="userService.GoogleAuth()"-->
-<!--                        expand="block">-->
-<!--                    Login with Google-->
-<!--                </ion-button>-->
-<!--            </ion-col>-->
-<!--        </ion-row>-->
-<!--    </form>-->
-<!--</ion-content>-->
+
+
 

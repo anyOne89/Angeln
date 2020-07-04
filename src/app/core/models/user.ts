@@ -1,12 +1,13 @@
 export interface User {
-    uid: string;
+    userUid: string;
+    name: string;
     email: string;
-    firstName: string;
-    secondName: string;
+
+
+    rank?: string;
+
     birthDay?: Date;
     photoURL?: string;
-    emailVerified?: boolean;
-
     aboutMe?: string;
     interessen?: string;
     verein?: string;
