@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../core/services/user.service';
 import {Router} from '@angular/router';
 import {IonInput, ToastController} from '@ionic/angular';
+import UserCredential = firebase.auth.UserCredential;
 
 @Component({
     selector: 'app-auth',
@@ -21,20 +22,31 @@ export class AuthComponent implements OnInit {
 
 
     logIn(email: IonInput, password: IonInput): void {
-        this.userService.login(email.value, password.value).then((res) => {
+        this.userService.login(email.value, password.value).then((res: UserCredential): void => {
             this.router.navigate(['tabs']);
+            this.sendEmailToUserForVerification();
 
-            if (!this.userService.isEmailVerified) {
-                this.userService.SendVerificationMail().then(res => {
-                    this.presentToast();
-                });
-            }
-
-        }).catch((error) => {
-            this.authFailedToast(error.message);
+        }).catch(err => {
+            this.authFailedToast(err.message);
         });
     }
 
+
+    private sendEmailToUserForVerification() {
+        if (!this.userService.isEmailVerified) {
+            this.userService.SendVerificationMail().then(res => {
+                this.printVerificationEmailSentToToast();
+            });
+        }
+    }
+
+   private async printVerificationEmailSentToToast() {
+        const toast = await this.toastController.create({
+            message: 'Verification Email Sent to ' + this.userService.getUserEmail(),
+            duration: 4000
+        });
+        await toast.present();
+    }
 
     goToRegisterPage() {
         this.router.navigate(['/register']).then(res => {
@@ -42,13 +54,6 @@ export class AuthComponent implements OnInit {
     }
 
 
-    async presentToast() {
-        const toast = await this.toastController.create({
-            message: 'Verification Email Sent to ' +  this.userService.getUserEmail(),
-            duration: 4000
-        });
-        await toast.present();
-    }
 
     async authFailedToast(message) {
         const toast = await this.toastController.create({

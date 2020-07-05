@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
+import {AboutMeComponent} from './tabs/meins/about-me/about-me.component';
 
 const routes: Routes = [
 
@@ -12,6 +13,11 @@ const routes: Routes = [
         path: 'tabs',
         loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
     },
+
+    // {
+    //     path: 'aboutMe',
+    //     component: AboutMeComponent,
+    // }
 ];
 
 @NgModule({

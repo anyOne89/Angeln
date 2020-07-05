@@ -1,12 +1,27 @@
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MainsPage } from './mains-page.component';
+import { MeinsPage } from './meins-page.component';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
-import { Tab4PageRoutingModule } from './tab4-routing.module';
+import {AboutMeComponent} from './about-me/about-me.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: MeinsPage,
+  },
+
+
+  {
+    path: 'aboutMe',
+    component: AboutMeComponent,
+  }
+
+
+];
 
 @NgModule({
   imports: [
@@ -14,9 +29,8 @@ import { Tab4PageRoutingModule } from './tab4-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    RouterModule.forChild([{ path: '', component: MainsPage }]),
-    Tab4PageRoutingModule,
+    RouterModule.forChild(routes),
   ],
-  declarations: [MainsPage]
+  declarations: [MeinsPage, AboutMeComponent]
 })
 export class MeinsPageModule {}

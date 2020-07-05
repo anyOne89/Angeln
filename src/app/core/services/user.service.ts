@@ -1,5 +1,5 @@
 import {Injectable, NgZone} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, Subscriber} from 'rxjs';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
@@ -93,9 +93,12 @@ export class UserService {
     }
 
     // Returns true when user is looged in
-    get isLoggedIn(): boolean {
+    get isLoggedIn(): Observable<boolean> {
         const user = JSON.parse(localStorage.getItem('user'));
-        return (user !== null && user.emailVerified !== false) ? true : false;
+        return new Observable((observer: Subscriber<boolean>): void => {
+            observer.next(user !== null);
+            // return (user !== null && user.emailVerified !== false) ? true : false;
+        });
     }
 
     // // Returns true when user's email is verified
@@ -141,28 +144,23 @@ export class UserService {
     }
 
 
-
-
-
-
-
-
-
-    updateUser(userKey, value){
+    updateUser(userKey, value) {
         // value.nameToSearch = value.name.toLowerCase();
         // return this.db.collection('users').doc(userKey).set(value);
     }
-    searchUsersByAge(value){
+
+    searchUsersByAge(value) {
         // return this.db.collection('users',ref >
         //     ref.orderBy('age').startAt(value)).snapshotChanges();
     }
-    searchUsers(searchValue){
+
+    searchUsers(searchValue) {
         // return this.db.collection('users',ref => ref.where('nameToSearch', '>=', searchValue)
         //     .where('nameToSearch', '<=', searchValue + '\uf8ff'))
         //     .snapshotChanges()
     }
 
-    searchByName(){
+    searchByName() {
         // let value = this.searchValue.toLowerCase();
         // this.firebaseService.searchUsers(value)
         //     .subscribe(result => {
@@ -170,7 +168,6 @@ export class UserService {
         //         this.items = this.combineLists(result, this.age_filtered_items);
         //     })
     }
-
 
 
 }

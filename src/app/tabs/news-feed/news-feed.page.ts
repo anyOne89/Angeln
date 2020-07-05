@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {IonInfiniteScroll} from '@ionic/angular';
+import {IonInfiniteScroll, IonRefresher} from '@ionic/angular';
 
 @Component({
     selector: 'app-tab1',
@@ -13,7 +13,6 @@ export class NewsFeedPage {
 
     constructor() {
     }
-
 
 
     loadData(event) {
@@ -33,4 +32,12 @@ export class NewsFeedPage {
     //   this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
     // }
 
+    doRefresh(refresher) {
+        // TODO: implement refresh function
+
+        setTimeout(() => {
+            console.log('Async operation has ended');
+            refresher.target.complete();
+        }, 2000);
+    }
 }

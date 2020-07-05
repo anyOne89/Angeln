@@ -23,4 +23,3 @@ MeinsPageModule = __decorate([
     })
 ], MeinsPageModule);
 export { MeinsPageModule };
-//# sourceMappingURL=tab4.module.js.map

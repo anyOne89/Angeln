@@ -8,8 +8,8 @@ let MainsPage = class MainsPage {
 MainsPage = __decorate([
     Component({
         selector: 'app-tab4',
-        templateUrl: 'mains-page.component.html',
-        styleUrls: ['mains-page.component.scss']
+        templateUrl: 'meins-page.component.html',
+        styleUrls: ['meins-page.component.scss']
     })
 ], MainsPage);
 export { MainsPage };

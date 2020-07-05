@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {User} from '../../../core/models/user';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
+import {Ranks} from '../../../core/models/ranks';
 
 @Component({
     selector: 'app-register',
@@ -29,12 +30,14 @@ export class RegisterComponent implements OnInit {
             this.router.navigate(['tabs']);
 
             const user: User = {
-                email: res.user.email.toString(),
-                name: name.value.toString(),
                 userUid: res.user.uid.toString(),
-                rank: 'Jungfischer'
+                name: name.value.toString(),
+                email: res.user.email.toString(),
+                registerDate: new Date(),
+                rank: Ranks.jungFischer.toString()
             };
 
+            // add User to DB
             this.usersRef.add(user);
         });
     }
