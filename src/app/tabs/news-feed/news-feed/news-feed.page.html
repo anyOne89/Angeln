@@ -1,0 +1,36 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-title>Header - No Border</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<!--SUCHE-->
+
+<ion-content>
+    <!--REFRESHER-->
+    <ion-refresher (ionRefresh)="doRefresh($event)" slot="fixed" id="refresher">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-list>
+        <app-news-card-content *ngFor="let card of cards"></app-news-card-content>
+    </ion-list>
+
+    <!--Infinite-scroll-->
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+
+
+
+    <!-- fab placed to the top end -->
+    <ion-fab vertical="top" horizontal="end" slot="fixed">
+        <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+
+</ion-content>

@@ -24,6 +24,10 @@ const routes: Routes = [
                 loadChildren: () => import('./meins/meins.module').then(m => m.MeinsPageModule)
             },
             {
+                path: 'tab5',
+                loadChildren: () => import('./add-content-modal/add-content.module').then(m => m.AddContentModule)
+            },
+            {
                 path: '',
                 redirectTo: '/tabs/tab1',
                 pathMatch: 'full'
@@ -34,7 +38,7 @@ const routes: Routes = [
         path: 'tabs',
         redirectTo: '/tabs/tab1',
         pathMatch: 'full'
-    }
+    },
 ];
 
 @NgModule({
