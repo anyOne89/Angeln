@@ -22,6 +22,10 @@
 
     <ion-list>
 
+        <ion-item lines="none">
+            <ion-toggle (ionChange)="onClick($event)" slot="end"></ion-toggle>
+        </ion-item>
+
         <ion-item button (click)="showAboutMe()">
             <ion-icon slot="start" name="logo-angular"></ion-icon>
             <ion-label>

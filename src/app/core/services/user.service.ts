@@ -132,7 +132,6 @@ export class UserService {
                 });
                 // this.SetUserData(result.user);
             }).catch((error) => {
-                // TODO: print toast
                 window.alert(error);
             });
     }
