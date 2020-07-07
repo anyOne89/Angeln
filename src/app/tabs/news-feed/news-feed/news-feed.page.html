@@ -12,8 +12,8 @@
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
-    <ion-list>
-        <app-news-card-content *ngFor="let card of cards"></app-news-card-content>
+    <ion-list *ngFor="let card of cards">
+        <app-news-card-content [card]=card></app-news-card-content>
     </ion-list>
 
     <!--Infinite-scroll-->
@@ -23,14 +23,12 @@
     </ion-infinite-scroll>
 
 
-
-
     <!-- fab placed to the top end -->
-    <ion-fab vertical="top" horizontal="end" slot="fixed">
-        <ion-fab-button>
-            <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
+<!--    <ion-fab vertical="top" horizontal="end" slot="fixed">-->
+<!--        <ion-fab-button>-->
+<!--            <ion-icon name="add"></ion-icon>-->
+<!--        </ion-fab-button>-->
+<!--    </ion-fab>-->
 
 
 </ion-content>

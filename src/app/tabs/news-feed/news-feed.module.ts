@@ -2,19 +2,25 @@ import {IonicModule} from '@ionic/angular';
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {NewsFeedPage} from './news-feed.page';
-import {ExploreContainerComponentModule} from '../explore-container/explore-container.module';
 
-import {NewsPageRoutingModule} from './news-feed-routing.module';
 import {NewsCardContentComponent} from './news-card-content/news-card-content.component';
+import {NewsFeedPage} from './news-feed/news-feed.page';
+import {RouterModule, Routes} from '@angular/router';
+
+
+const newsRoutes: Routes = [
+    {
+        path: '', component: NewsFeedPage,
+    }
+];
+
 
 @NgModule({
     imports: [
         IonicModule,
         CommonModule,
         FormsModule,
-        ExploreContainerComponentModule,
-        NewsPageRoutingModule,
+        RouterModule.forChild(newsRoutes),
     ],
     declarations: [NewsFeedPage, NewsCardContentComponent]
 })

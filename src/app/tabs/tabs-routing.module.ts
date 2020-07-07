@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {TabsPage} from './tabs.page';
+import {CameraModalPage} from './add-content-modal/camera-modal.page';
+import {IonicModule} from "@ionic/angular";
 
 const routes: Routes = [
     {
@@ -24,8 +26,7 @@ const routes: Routes = [
                 loadChildren: () => import('./meins/meins.module').then(m => m.MeinsPageModule)
             },
             {
-                path: 'tab5',
-                loadChildren: () => import('./add-content-modal/add-content.module').then(m => m.AddContentModule)
+                path: 'camera', component: CameraModalPage
             },
             {
                 path: '',
@@ -39,10 +40,12 @@ const routes: Routes = [
         redirectTo: '/tabs/tab1',
         pathMatch: 'full'
     },
+
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
+    declarations: [CameraModalPage],
+    imports: [RouterModule.forChild(routes), IonicModule],
     exports: [RouterModule]
 })
 export class TabsPageRoutingModule {
