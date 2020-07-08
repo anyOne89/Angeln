@@ -23,17 +23,17 @@
     <ion-list>
 
         <ion-item lines="none">
-            <ion-toggle (ionChange)="onClick($event)" slot="end"></ion-toggle>
+            <ion-toggle [(ngModel)]="isDarkModeOn" (ionChange)="toggleDarkMode()" slot="end"></ion-toggle>
         </ion-item>
 
-        <ion-item button (click)="showAboutMe()">
+        <ion-item button (click)="navigateToAboutMePage()">
             <ion-icon slot="start" name="logo-angular"></ion-icon>
             <ion-label>
                 <h3>About</h3>
             </ion-label>
         </ion-item>
 
-        <ion-item button (click)="showAboutMe()">
+        <ion-item button (click)="navigateToAboutMePage()">
             <ion-icon slot="start" name="logo-angular"></ion-icon>
             <ion-label>
                 <h3>Test</h3>
