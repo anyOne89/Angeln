@@ -26,8 +26,12 @@ const routes: Routes = [
                 loadChildren: () => import('./meins/meins.module').then(m => m.MeinsPageModule)
             },
             {
-                path: 'camera', component: CameraModalPage
+                path: 'camera',
+                loadChildren: () => import('./add-content-modal/camera-modal.page').then(m => m.CameraModalPage)
             },
+            // {
+            //     path: 'camera', component: CameraModalPage
+            // },
             {
                 path: '',
                 redirectTo: '/tabs/tab1',

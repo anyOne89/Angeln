@@ -5,6 +5,7 @@ import {
     Plugins, CameraResultType, Capacitor, FilesystemDirectory,
     CameraPhoto, CameraSource
 } from '@capacitor/core';
+import {CameraService} from "./camera.service";
 
 const {Camera, Filesystem, Storage} = Plugins;
 
@@ -14,10 +15,7 @@ const {Camera, Filesystem, Storage} = Plugins;
     styleUrls: ['./camera-modal.page.scss'],
 })
 export class CameraModalPage implements OnInit {
-
-    public photos: Photo[] = [];
-
-    constructor(private modalCtrl: ModalController) {
+    constructor(private modalCtrl: ModalController, public photoService: CameraService ) {
     }
 
     ngOnInit() {
@@ -35,22 +33,7 @@ export class CameraModalPage implements OnInit {
 
     }
 
-    public async addNewToGallery() {
-        // Take a photo
-        const capturedPhoto = await Camera.getPhoto({
-            resultType: CameraResultType.Uri,
-            source: CameraSource.Camera,
-            quality: 100
-        });
-
-
-        // this.photos.unshift({
-        //     filepath: "soon...",
-        //     webviewPath: capturedPhoto.webPath
-        // });
-    }
-
-    take() {
-        this.addNewToGallery();
+    addPhotoToGallery() {
+        this.photoService.addNewToGallery();
     }
 }
