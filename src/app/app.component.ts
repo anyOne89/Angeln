@@ -22,7 +22,7 @@ export class AppComponent {
         private meinsPageService: MeinsPageService
     ) {
         this.initializeApp();
-        // this.initDarkMode();
+        this.initDarkMode();
     }
 
     initializeApp() {
