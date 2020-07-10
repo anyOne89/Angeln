@@ -18,6 +18,8 @@ import {FormsModule} from '@angular/forms';
 import {UserService} from './core/services/user.service';
 import {firebaseConfig} from '../environments/environment';
 import {AuthPageModule} from './auth/auth-page.module';
+import {MeinsPageService} from './tabs/meins/meins-page.service';
+
 @NgModule({
     declarations: [AppComponent],
     entryComponents: [],
@@ -37,6 +39,7 @@ import {AuthPageModule} from './auth/auth-page.module';
 
 
     providers: [
+        MeinsPageService,
         UserService,
         StatusBar,
         SplashScreen,

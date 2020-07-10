@@ -1,6 +1,7 @@
 import {Component, OnInit, Renderer2, RendererFactory2} from '@angular/core';
 import {UserService} from '../../core/services/user.service';
 import {Router} from '@angular/router';
+import {MeinsPageService} from "./meins-page.service";
 
 @Component({
     selector: 'app-tab4',
@@ -9,28 +10,13 @@ import {Router} from '@angular/router';
 })
 export class MeinsPage implements OnInit {
 
-    constructor(public userService: UserService, public router: Router) {
+    constructor(public userService: UserService, public router: Router, private meinsPageService: MeinsPageService) {
     }
 
-    private isDarkModeOn: boolean;
+    private isDarkModeOn = false;
 
     ngOnInit(): void {
-
-        if (localStorage.getItem('prefers-color') === 'light') {
-            localStorage.setItem('prefers-color', 'dark')
-            document.body.setAttribute('data-theme', 'dark');
-        } else {
-            localStorage.setItem('prefers-color', 'light')
-            document.body.setAttribute('data-theme', 'light');
-        }
-
-        // if (localStorage.getItem('prefers-color') === 'dark') {
-        //
-        //     document.body.setAttribute('data-theme', 'dark');
-        // } else {
-        //     document.body.setAttribute('data-theme', 'light');
-        // }
-        console.log('window.matchMed', window.matchMedia('(prefers-color-scheme: light)'));
+        this.isDarkModeOn = this.meinsPageService.isDarkmode.getValue();
     }
 
     navigateToAboutMePage() {
