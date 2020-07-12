@@ -11,26 +11,29 @@ let AuthComponent = class AuthComponent {
     logIn(email, password) {
         this.userService.login(email.value, password.value).then((res) => {
             this.router.navigate(['tabs']);
-            if (!this.userService.isEmailVerified) {
-                this.userService.SendVerificationMail().then(res => {
-                    this.presentToast();
-                });
-            }
-        }).catch((error) => {
-            this.authFailedToast(error.message);
+            this.sendEmailToUserForVerification();
+        }).catch(err => {
+            this.authFailedToast(err.message);
         });
     }
-    goToRegisterPage() {
-        this.router.navigate(['/register']).then(res => {
-        });
+    sendEmailToUserForVerification() {
+        if (!this.userService.isEmailVerified) {
+            this.userService.SendVerificationMail().then(res => {
+                this.printVerificationEmailSentToToast();
+            });
+        }
     }
-    presentToast() {
+    printVerificationEmailSentToToast() {
         return __awaiter(this, void 0, void 0, function* () {
             const toast = yield this.toastController.create({
                 message: 'Verification Email Sent to ' + this.userService.getUserEmail(),
                 duration: 4000
             });
             yield toast.present();
+        });
+    }
+    goToRegisterPage() {
+        this.router.navigate(['/register']).then(res => {
         });
     }
     authFailedToast(message) {

@@ -15,6 +15,8 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from './core/services/user.service';
 import { firebaseConfig } from '../environments/environment';
 import { AuthPageModule } from './auth/auth-page.module';
+import { MeinsPageService } from './tabs/meins/meins-page.service';
+import { CameraModule } from './tabs/add-content-modal/camera.module';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -32,8 +34,10 @@ AppModule = __decorate([
             // modules
             AppRoutingModule,
             AuthPageModule,
+            CameraModule
         ],
         providers: [
+            MeinsPageService,
             UserService,
             StatusBar,
             SplashScreen,

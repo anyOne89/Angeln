@@ -1,12 +1,10 @@
-import { IonicModule } from '@ionic/angular';
+import {IonicModule} from '@ionic/angular';
 import {RouterModule, Routes} from '@angular/router';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MeinsPage } from './meins-page.component';
-import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import {NgModule} from '@angular/core';
+import {MeinsPage} from './meins-page.component';
 
 import {AboutMeComponent} from './about-me/about-me.component';
+import {FormsModule} from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -26,10 +24,8 @@ const routes: Routes = [
 @NgModule({
   imports: [
     IonicModule,
-    CommonModule,
-    FormsModule,
-    ExploreContainerComponentModule,
     RouterModule.forChild(routes),
+    FormsModule,
   ],
   declarations: [MeinsPage, AboutMeComponent]
 })

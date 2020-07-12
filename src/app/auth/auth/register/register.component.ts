@@ -39,6 +39,8 @@ export class RegisterComponent implements OnInit {
 
             // add User to DB
             this.usersRef.add(user);
+        }).catch(err => {
+            console.log('Something went wrong:', err.message);
         });
     }
 }

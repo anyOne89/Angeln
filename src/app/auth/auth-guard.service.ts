@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Route, Router} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Observable} from 'rxjs';
 import {UserService} from '../core/services/user.service';
-import {map, take} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
-export class NoAuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
 
     constructor(private userService: UserService, private router: Router) {
     }
@@ -16,14 +15,12 @@ export class NoAuthGuard implements CanActivate {
     canActivate(next: ActivatedRouteSnapshot,
                 state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-        const isLoggedIn = this.userService.isLoggedIn.pipe(take(1), map(isAuth => !isAuth));
-
-        if (isLoggedIn) {
-            this.router.navigate(['/tabs']).then(res => {
-            });
+        if (this.userService.isLoggedIn) {
+            this.router.navigate(['/tabs']);
+            return false;
+        } else {
+            return true;
         }
 
-        return isLoggedIn;
     }
-
 }

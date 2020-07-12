@@ -12,9 +12,6 @@ import {MeinsPageService} from './tabs/meins/meins-page.service';
 })
 export class AppComponent {
 
-    private email: string;
-    private password: string;
-
     constructor(
         private platform: Platform,
         private splashScreen: SplashScreen,

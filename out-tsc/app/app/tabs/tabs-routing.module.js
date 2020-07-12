@@ -2,6 +2,7 @@ import { __decorate } from "tslib";
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { IonicModule } from '@ionic/angular';
 const routes = [
     {
         path: '',
@@ -21,7 +22,11 @@ const routes = [
             },
             {
                 path: 'tab4',
-                loadChildren: () => import('./meins/tab4.module').then(m => m.MeinsPageModule)
+                loadChildren: () => import('./meins/meins.module').then(m => m.MeinsPageModule)
+            },
+            {
+                path: 'camera',
+                loadChildren: () => import('./add-content-modal/camera.module').then(m => m.CameraModule)
             },
             {
                 path: '',
@@ -34,13 +39,14 @@ const routes = [
         path: 'tabs',
         redirectTo: '/tabs/tab1',
         pathMatch: 'full'
-    }
+    },
 ];
 let TabsPageRoutingModule = class TabsPageRoutingModule {
 };
 TabsPageRoutingModule = __decorate([
     NgModule({
-        imports: [RouterModule.forChild(routes)],
+        declarations: [],
+        imports: [RouterModule.forChild(routes), IonicModule],
         exports: [RouterModule]
     })
 ], TabsPageRoutingModule);

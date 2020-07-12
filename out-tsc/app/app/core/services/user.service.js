@@ -1,5 +1,6 @@
 import { __decorate } from "tslib";
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { auth } from 'firebase';
 let UserService = class UserService {
     constructor(afStore, ngFireAuth, router, ngZone) {
@@ -23,11 +24,10 @@ let UserService = class UserService {
     signUp(email, password) {
         return new Promise((resolve, reject) => {
             this.ngFireAuth.createUserWithEmailAndPassword(email, password).then(value => {
-                this.SendVerificationMail().then(res => {
-                    resolve(value);
-                });
-            }).catch(err => {
-                console.log('Something went wrong:', err.message);
+                resolve(value);
+                // this.SendVerificationMail().then(res => {
+                //
+                // });
             });
         });
     }
@@ -60,49 +60,28 @@ let UserService = class UserService {
             this.router.navigate(['auth']);
         });
     }
-    //
-    //
     // // Recover password
-    // PasswordRecover(passwordResetEmail) {
-    //     return this.ngFireAuth.sendPasswordResetEmail(passwordResetEmail)
-    //         .then(() => {
-    //             window.alert('Password reset email has been sent, please check your inbox.');
-    //         }).catch((error) => {
-    //             window.alert(error)
-    //         })
-    // }
+    PasswordRecover(passwordResetEmail) {
+        return this.ngFireAuth.sendPasswordResetEmail(passwordResetEmail)
+            .then(() => {
+            window.alert('Password reset email has been sent, please check your inbox.');
+        }).catch((error) => {
+            window.alert(error);
+        });
+    }
     // Returns true when user is looged in
     get isLoggedIn() {
         const user = JSON.parse(localStorage.getItem('user'));
-        return (user !== null && user.emailVerified !== false) ? true : false;
+        return new Observable((observer) => {
+            observer.next(user !== null);
+            // return (user !== null && user.emailVerified !== false) ? true : false;
+        });
     }
     // // Returns true when user's email is verified
     get isEmailVerified() {
         const user = JSON.parse(localStorage.getItem('user'));
         return (user.emailVerified !== false) ? true : false;
     }
-    // signInWithGoogle() {
-    //     const provider = new auth.GoogleAuthProvider();
-    //     const scopes = ['profile', 'email'];
-    //     return this.socialSignIn(provider.providerId, scopes);
-    // }
-    // socialSignIn(providerName: string, scopes?: Array<string>): Promise<any> {
-    //     const provider = new auth.OAuthProvider(providerName);
-    //
-    //     // add any permission scope you need
-    //     if (scopes) {
-    //         scopes.forEach(scope => {
-    //             provider.addScope(scope);
-    //         });
-    //     }
-    //
-    //     // if (this.platform.is('desktop')) {
-    //     return this.ngFireAuth.signInWithPopup(provider);
-    //     // } else {
-    //     //     // web but not desktop, for example mobile PWA
-    //     //     return this.ngFireAuth.signInWithRedirect(provider);
-    //     // }
-    // }
     // Email verification when new user register
     SendVerificationMail() {
         return this.ngFireAuth.currentUser.then(user => {
@@ -124,13 +103,33 @@ let UserService = class UserService {
             });
             // this.SetUserData(result.user);
         }).catch((error) => {
-            // TODO: print toast
             window.alert(error);
         });
     }
     getUserEmail() {
         const user = JSON.parse(localStorage.getItem('user'));
         return user.email;
+    }
+    updateUser(userKey, value) {
+        // value.nameToSearch = value.name.toLowerCase();
+        // return this.db.collection('users').doc(userKey).set(value);
+    }
+    searchUsersByAge(value) {
+        // return this.db.collection('users',ref >
+        //     ref.orderBy('age').startAt(value)).snapshotChanges();
+    }
+    searchUsers(searchValue) {
+        // return this.db.collection('users',ref => ref.where('nameToSearch', '>=', searchValue)
+        //     .where('nameToSearch', '<=', searchValue + '\uf8ff'))
+        //     .snapshotChanges()
+    }
+    searchByName() {
+        // let value = this.searchValue.toLowerCase();
+        // this.firebaseService.searchUsers(value)
+        //     .subscribe(result => {
+        //         this.name_filtered_items = result;
+        //         this.items = this.combineLists(result, this.age_filtered_items);
+        //     })
     }
 };
 UserService = __decorate([

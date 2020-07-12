@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {ModalController} from '@ionic/angular';
-import {CameraModalPage} from './add-content-modal/camera-modal.page';
+import {CameraPage} from './add-content-modal/camera-page.component';
 import {Router} from "@angular/router";
 
 @Component({
@@ -20,7 +20,7 @@ export class TabsPage {
 
     async presentModal() {
         // const modal = await this.modalController.create({
-        //     component: CameraModalPage,
+        //     component: CameraPage,
         // });
         // return await modal.present();
 

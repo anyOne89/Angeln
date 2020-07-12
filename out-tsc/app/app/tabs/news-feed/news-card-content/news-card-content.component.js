@@ -1,9 +1,14 @@
 import { __decorate } from "tslib";
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 let NewsCardContentComponent = class NewsCardContentComponent {
-    constructor() { }
-    ngOnInit() { }
+    constructor() {
+    }
+    ngOnInit() {
+    }
 };
+__decorate([
+    Input()
+], NewsCardContentComponent.prototype, "card", void 0);
 NewsCardContentComponent = __decorate([
     Component({
         selector: 'app-news-card-content',

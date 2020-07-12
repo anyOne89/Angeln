@@ -1,0 +1,33 @@
+<ion-header translucent>
+    <ion-toolbar>
+        <ion-title>Modal Content</ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+    <ion-row>
+        <ion-col width-50>
+            <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+                <ion-fab-button (click)="photoService.addNewToGallery()">
+                    <ion-icon name="camera"></ion-icon>
+                </ion-fab-button>
+            </ion-fab>
+        </ion-col>
+
+        <ion-col width-50>
+            <button ion-button color="secondary" type="button" full round large (click)="selectPhoto()">
+                <ion-icon name="md-image"></ion-icon>
+            </button>
+        </ion-col>
+    </ion-row>
+
+
+</ion-content>
+
+

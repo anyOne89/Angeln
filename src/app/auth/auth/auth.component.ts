@@ -24,7 +24,8 @@ export class AuthComponent implements OnInit {
     logIn(email: IonInput, password: IonInput): void {
         this.userService.login(email.value, password.value).then((res: UserCredential): void => {
             this.router.navigate(['tabs']);
-            this.sendEmailToUserForVerification();
+
+            // this.sendEmailToUserForVerification();
 
         }).catch(err => {
             this.authFailedToast(err.message);
@@ -40,7 +41,7 @@ export class AuthComponent implements OnInit {
         }
     }
 
-   private async printVerificationEmailSentToToast() {
+    private async printVerificationEmailSentToToast() {
         const toast = await this.toastController.create({
             message: 'Verification Email Sent to ' + this.userService.getUserEmail(),
             duration: 4000
@@ -52,7 +53,6 @@ export class AuthComponent implements OnInit {
         this.router.navigate(['/register']).then(res => {
         });
     }
-
 
 
     async authFailedToast(message) {

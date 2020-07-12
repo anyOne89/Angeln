@@ -11,7 +11,7 @@
     <div>
         <ion-item lines="full">
             <ion-label position="floating">Name</ion-label>
-            <ion-input type="text" #name required></ion-input>
+            <ion-input  type="text" #name required></ion-input>
         </ion-item>
 
         <ion-item lines="full">
@@ -21,7 +21,7 @@
 
         <ion-item lines="full">
             <ion-label position="floating">Password</ion-label>
-            <ion-input type="text" #password required></ion-input>
+            <ion-input type="password" #password required [minlength]="6"></ion-input>
         </ion-item>
 
         <ion-item lines="full">

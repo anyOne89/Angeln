@@ -1,44 +1,49 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Sign in User</ion-title>
+        <ion-title>
+            Angeli - Plätze
+        </ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <div>
-        <ion-item lines="full">
-            <ion-label position="floating">Email</ion-label>
-            <ion-input type="text" #email required></ion-input>
-        </ion-item>
-
-        <ion-item lines="full">
-            <ion-label position="floating">Password</ion-label>
-            <ion-input type="text" #password required></ion-input>
-        </ion-item>
-
+<ion-content class="auth-form">
+    <ion-grid>
         <ion-row>
-            <ion-col>
-                <ion-button type="submit" (click)="logIn(email, password)" expand="block">Login</ion-button>
+            <ion-col align-self-center>
+
+                <ion-col>
+                    <ion-item lines="full">
+                        <ion-label position="floating">Email</ion-label>
+                        <ion-input type="text" #email required></ion-input>
+                    </ion-item>
+
+<!--                    <ion-button expand="full">Weiter</ion-button>-->
+
+                    <ion-item lines="full">
+                        <ion-label position="floating">Password</ion-label>
+                        <ion-input type="text" #password required></ion-input>
+                    </ion-item>
+
+
+                </ion-col>
+
+                <col-col>
+                    <ion-button type="submit" (click)="logIn(email, password)" expand="full">Login</ion-button>
+                </col-col>
+
+                <col-col>
+                    <span class="divider line one-line">or</span>
+                    <span class="already">Already a user?</span>
+                    <!--                    <ion-button (click)="goToRegisterPage()" expand="full">Register</ion-button>-->
+
+                    <ion-button (click)="userService.GoogleAuth()" expand="full">Weiter mit Google</ion-button>
+                    <ion-button expand="full">Weiter mit Facebook</ion-button>
+                </col-col>
+
             </ion-col>
         </ion-row>
-    </div>
-
-
-    <ion-button (click)="goToRegisterPage()">Register</ion-button>
-
-    <!--    WORKING!!!!-->
-    <!--    <ion-button  (click)="userService.PasswordRecover('j.just2002@gmail.com')" >Reset Password</ion-button>-->
-
-    <!-- Calling GoogleAuth() Api from AuthService -->
-    <div>
-        <button type="button" (click)="userService.GoogleAuth()">
-            <img src="../../../assets/icon/btn_google_signin_dark_normal_web.png"/>
-        </button>
-    </div>
-
-
+    </ion-grid>
 </ion-content>
-
 
 
 

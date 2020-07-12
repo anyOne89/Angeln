@@ -43,8 +43,6 @@ export class UserService {
                 // this.SendVerificationMail().then(res => {
                 //
                 // });
-            }).catch(err => {
-                console.log('Something went wrong:', err.message);
             });
         });
     }
@@ -93,12 +91,15 @@ export class UserService {
     }
 
     // Returns true when user is looged in
-    get isLoggedIn(): Observable<boolean> {
+    get isLoggedIn(): boolean {
         const user = JSON.parse(localStorage.getItem('user'));
-        return new Observable((observer: Subscriber<boolean>): void => {
-            observer.next(user !== null);
-            // return (user !== null && user.emailVerified !== false) ? true : false;
-        });
+        // return new Observable((observer: Subscriber<boolean>): void => {
+        //     observer.next(user !== null);
+
+        return user !== null;
+
+        // return (user !== null && user.emailVerified !== false) ? true : false;
+        // });
     }
 
     // // Returns true when user's email is verified
@@ -112,7 +113,7 @@ export class UserService {
         return this.ngFireAuth.currentUser.then(user => {
             user.sendEmailVerification().then(res => {
 
-                this.router.navigate(['verify-email']);
+                //this.router.navigate(['verify-email']);
             });
         });
     }
@@ -125,15 +126,14 @@ export class UserService {
 
     // Auth providers
     private authLogin(provider) {
-        return this.ngFireAuth.signInWithPopup(provider)
-            .then((result) => {
-                this.ngZone.run(() => {
-                    this.router.navigate(['tabs']);
-                });
-                // this.SetUserData(result.user);
-            }).catch((error) => {
-                window.alert(error);
+        return this.ngFireAuth.signInWithPopup(provider).then((result) => {
+            this.ngZone.run(() => {
+                this.router.navigate(['tabs']);
             });
+            // this.SetUserData(result.user);
+        }).catch((error) => {
+            window.alert(error);
+        });
     }
 
 

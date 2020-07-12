@@ -1,0 +1,1 @@
+//# sourceMappingURL=news-item-model.js.map
