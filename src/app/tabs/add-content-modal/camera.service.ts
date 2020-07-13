@@ -8,7 +8,9 @@ import {
     FilesystemDirectory,
     Plugins
 } from '@capacitor/core';
-import {Platform} from '@ionic/angular';
+import {ActionSheetController, Platform} from '@ionic/angular';
+import {AngularFireStorage, AngularFireUploadTask} from '@angular/fire/storage';
+import {Observable} from 'rxjs';
 
 const {Camera, Filesystem, Storage} = Plugins;
 
@@ -19,7 +21,9 @@ export class CameraService {
     public photos: Photo[] = [];
     private PHOTO_STORAGE = 'photos';
 
-    constructor(public platform: Platform) {
+    constructor(public platform: Platform,
+                private storage: AngularFireStorage,
+                public actionSheetController: ActionSheetController) {
     }
 
     public async loadSaved() {
@@ -168,4 +172,66 @@ export class CameraService {
         reader.readAsDataURL(blob);
     });
 
+
+    uploadFileAndGetMetadata(mediaFolderPath: string, fileToUpload: File): FilesUploadMetadata {
+        const filePath = `${mediaFolderPath}/${new Date().getTime()}_${fileToUpload.name}`;
+        const uploadTask: AngularFireUploadTask = this.storage.upload(filePath, fileToUpload);
+
+
+        return {
+            downloadUrl$: undefined,
+            uploadProgress$: uploadTask.percentageChanges()
+        };
+    }
+
+
+    pickImage(sourceType) {
+        const options: CameraOptions = {
+            resultType: CameraResultType.Uri, // file-based data; provides best performance
+            source: sourceType, // automatically take a new photo with the camera
+            quality: 50 // highest quality (0 to 100)
+        }
+
+
+        Camera.getPhoto(options).then((imageData) => {
+            // imageData is either a base64 encoded string or a file URI
+            // If it's base64 (DATA_URL):
+            // let base64Image = 'data:image/jpeg;base64,' + imageData;
+        }, (err) => {
+            // Handle error
+        });
+    }
+
+    async selectImage() {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Select Image source',
+            buttons: [{
+                text: 'Load from Library',
+                handler: () => {
+                    this.pickImage(CameraSource.Photos);
+                }
+            },
+                {
+                    text: 'Use Camera',
+                    handler: () => {
+                        this.pickImage(CameraSource.Camera);
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    role: 'cancel'
+                }
+            ]
+        });
+        await actionSheet.present();
+    }
+
 }
+
+export interface FilesUploadMetadata {
+    uploadProgress$: Observable<number>;
+    downloadUrl$: Observable<string>;
+}
+
+
+

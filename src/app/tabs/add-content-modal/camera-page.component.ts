@@ -35,48 +35,8 @@ export class CameraPage implements OnInit {
 
     selectPhoto(): void {
 
-       // https://indepth.dev/implement-file-upload-with-firebase-storage/
+        // https://indepth.dev/implement-file-upload-with-firebase-storage/
     }
 
 
-    // chooseFiles(event) {
-    //     //     //     this.selectedFiles = event.target.files;
-    //     //     //     if (this.selectedFiles.item(0)) {
-    //     //     //         this.uploadpic();
-    //     //     //     }
-    //     //     // }
-    //     //     //
-    //     //     // uploadpic() {
-    //     //     //     const file = this.selectedFiles.item(0);
-    //     //     //     const uploadTask = this.storage.upload('/card-fische/' + this.userService.getUserEmail(), file);
-    //     //     //
-    //     //     //     const uploadTasks =  `/card-fische//${new Date().getTime()}_${name}`;
-    //     //     //
-    //     //     //
-    //     //     //
-    //     //     //     this.imgsrc = uploadTask.percentageChanges();
-    //     //     //
-    //     //     //     uploadTask.percentageChanges().subscribe((value) => {
-    //     //     //         this.progressBarValue = value.toFixed(2);
-    //     //     //     });
-    //     //     // }
-
-
-    uploadFileAndGetMetadata(mediaFolderPath: string, fileToUpload: File): FilesUploadMetadata {
-        const {name} = fileToUpload;
-        const filePath = `${mediaFolderPath}/${new Date().getTime()}_${name}`;
-        const uploadTask: AngularFireUploadTask = this.storage.upload(filePath, fileToUpload);
-
-
-        return {
-            downloadUrl$: undefined,
-            uploadProgress$: uploadTask.percentageChanges()
-        };
-    }
-
-}
-
-export interface FilesUploadMetadata {
-    uploadProgress$: Observable<number>;
-    downloadUrl$: Observable<string>;
 }
