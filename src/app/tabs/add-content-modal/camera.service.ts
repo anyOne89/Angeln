@@ -1,5 +1,13 @@
 import {Injectable} from '@angular/core';
-import {CameraOptions, CameraPhoto, CameraResultType, CameraSource, Capacitor, FilesystemDirectory, Plugins} from '@capacitor/core';
+import {
+    CameraOptions,
+    CameraPhoto,
+    CameraResultType,
+    CameraSource,
+    Capacitor,
+    FilesystemDirectory,
+    Plugins
+} from '@capacitor/core';
 import {Platform} from '@ionic/angular';
 
 const {Camera, Filesystem, Storage} = Plugins;
@@ -10,9 +18,8 @@ export class CameraService {
 
     public photos: Photo[] = [];
     private PHOTO_STORAGE = 'photos';
-    private platform: Platform;
 
-    constructor(platform: Platform) {
+    constructor(public platform: Platform) {
     }
 
     public async loadSaved() {
@@ -20,21 +27,23 @@ export class CameraService {
         const photos = await Storage.get({key: this.PHOTO_STORAGE});
         this.photos = JSON.parse(photos.value) || [];
 
+        // If running on the web... (hybrid 	a device running Capacitor or Cordova)
+        // https://ionicframework.com/docs/angular/platforms
+        if (!this.platform.is('hybrid')) {
+            // Display the photo by reading into base64 format
+            for (const photo of this.photos) {
+                // Read each saved photo's data from the Filesystem
+                const readFile = await Filesystem.readFile({
+                    path: photo.filepath,
+                    directory: FilesystemDirectory.Data
+                });
+
+                // Web platform only: Save the photo into the base64 field
+                photo.base64 = `data:image/jpeg;base64,${readFile.data}`;
+            }
+        }
+
         return this.photos;
-        // If running on the web...
-        // if (!this.platform.is('hybrid')) {
-        //     // Display the photo by reading into base64 format
-        //     for (const photo of this.photos) {
-        //         // Read each saved photo's data from the Filesystem
-        //         const readFile = await Filesystem.readFile({
-        //             path: photo.filepath,
-        //             directory: FilesystemDirectory.Data
-        //         });
-        //
-        //         // Web platform only: Save the photo into the base64 field
-        //         photo.base64 = `data:image/jpeg;base64,${readFile.data}`;
-        //     }
-        // }
     }
 
 
@@ -57,14 +66,22 @@ export class CameraService {
 
         const savedImageFile = await this.savePicture(capturedPhoto);
 
-
         // Add new photo to Photos array
         this.photos.unshift(savedImageFile);
 
         // Cache all photo data for future retrieval
         Storage.set({
             key: this.PHOTO_STORAGE,
-            value: JSON.stringify(this.photos.map(p => {
+            // value: JSON.stringify(this.photos.map(p => {
+            //     // Don't save the base64 representation of the photo data,
+            //     // since it's already saved on the Filesystem
+            //     const photoCopy = {...p};
+            //     delete photoCopy.base64;
+            //
+            //     return photoCopy;
+            // }));
+
+            value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
                 // Don't save the base64 representation of the photo data,
                 // since it's already saved on the Filesystem
                 const photoCopy = {...p};
@@ -72,18 +89,6 @@ export class CameraService {
 
                 return photoCopy;
             }))
-
-            // WEB
-            // value: this.platform.is('hybrid')
-            //     ? JSON.stringify(this.photos)
-            //     : JSON.stringify(this.photos.map(p => {
-            //         // Don't save the base64 representation of the photo data,
-            //         // since it's already saved on the Filesystem
-            //         const photoCopy = {...p};
-            //         delete photoCopy.base64;
-            //
-            //         return photoCopy;
-            //     }))
         });
     }
 
@@ -98,41 +103,41 @@ export class CameraService {
             data: base64Data,
             directory: FilesystemDirectory.Data
         });
-        //
-        // if (this.platform.is('hybrid')) {
-        //     // Display the new image by rewriting the 'file://' path to HTTP
-        //     // Details: https://ionicframework.com/docs/building/webview#file-protocol
-        //     return {
-        //         filepath: savedFile.uri,
-        //         webviewPath: Capacitor.convertFileSrc(savedFile.uri),
-        //     };
-        // } else {
-        //     // Use webPath to display the new image instead of base64 since it's
-        //     // already loaded into memory
-        return {
-            filepath: fileName,
-            webviewPath: cameraPhoto.webPath
-        };
-        // }
+
+        if (this.platform.is('hybrid')) {
+            // Display the new image by rewriting the 'file://' path to HTTP
+            // Details: https://ionicframework.com/docs/building/webview#file-protocol
+            return {
+                filepath: savedFile.uri,
+                webviewPath: Capacitor.convertFileSrc(savedFile.uri),
+            };
+        } else {
+            // Use webPath to display the new image instead of base64 since it's
+            // already loaded into memory
+            return {
+                filepath: fileName,
+                webviewPath: cameraPhoto.webPath
+            };
+        }
     }
 
     // Read camera photo into base64 format based on the platform the app is running on
     private async readAsBase64(cameraPhoto: CameraPhoto): Promise<string> {
         // "hybrid" will detect Cordova or Capacitor
-        // if (this.platform.is('hybrid')) {
-        //     // Read the file into base64 format
-        //     const file = await Filesystem.readFile({
-        //         path: cameraPhoto.path
-        //     });
-        //
-        //     return file.data;
-        // } else {
-        // Fetch the photo, read as a blob, then convert to base64 format
-        const response = await fetch(cameraPhoto.webPath!);
-        const blob = await response.blob();
+        if (this.platform.is('hybrid')) {
+            // Read the file into base64 format
+            const file = await Filesystem.readFile({
+                path: cameraPhoto.path
+            });
 
-        return await this.convertBlobToBase64(blob) as string;
-        // }
+            return file.data;
+        } else {
+            // Fetch the photo, read as a blob, then convert to base64 format
+            const response = await fetch(cameraPhoto.webPath!);
+            const blob = await response.blob();
+
+            return await this.convertBlobToBase64(blob) as string;
+        }
     }
 
     // Delete picture by removing it from reference data and the filesystem

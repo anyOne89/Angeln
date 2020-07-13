@@ -14,7 +14,7 @@ export class CameraEditCardComponent implements OnInit {
 
     constructor(public photoService: CameraService,
                 public actionSheetController: ActionSheetController,
-                private fireStorage: AngularFireStorage) {
+                private afStorage: AngularFireStorage) {
     }
 
     ngOnInit() {
@@ -23,7 +23,7 @@ export class CameraEditCardComponent implements OnInit {
 
     async uploadFile() {
 
-        // this.cameraService.photos[0].
+        this.afStorage.upload('/upload/to/this-path', ;
 
     }
 
