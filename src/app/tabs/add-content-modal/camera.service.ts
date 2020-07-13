@@ -203,6 +203,7 @@ export class CameraService {
     }
 
     async selectImage() {
+        // https://enappd.com/blog/image-picker-in-ionic-4-app/67/
         const actionSheet = await this.actionSheetController.create({
             header: 'Select Image source',
             buttons: [{
@@ -219,6 +220,7 @@ export class CameraService {
                 },
                 {
                     text: 'Cancel',
+                    icon: 'close',
                     role: 'cancel'
                 }
             ]
