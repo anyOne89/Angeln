@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {TabsPage} from './tabs.page';
 import {CameraPage} from './add-content-modal/camera-page.component';
 import {IonicModule} from '@ionic/angular';
+import {CameraService} from './add-content-modal/camera.service';
 
 const routes: Routes = [
     {
@@ -47,7 +48,8 @@ const routes: Routes = [
 @NgModule({
     declarations: [],
     imports: [RouterModule.forChild(routes), IonicModule],
-    exports: [RouterModule]
+    exports: [RouterModule],
+    providers: [CameraService]
 })
 export class TabsPageRoutingModule {
 }

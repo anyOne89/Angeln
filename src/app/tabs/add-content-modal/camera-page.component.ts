@@ -3,10 +3,7 @@ import {ActionSheetController, ModalController} from '@ionic/angular';
 
 import {Plugins} from '@capacitor/core';
 import {CameraService} from './camera.service';
-import {UserService} from "../../core/services/user.service";
-import {from, Observable} from "rxjs";
-import {AngularFireUploadTask} from "@angular/fire/storage";
-import {switchMap} from "rxjs/operators";
+import {UserService} from '../../core/services/user.service';
 
 const {Camera, Filesystem, Storage} = Plugins;
 
@@ -34,8 +31,30 @@ export class CameraPage implements OnInit {
 
 
     selectPhoto(): void {
-
         // https://indepth.dev/implement-file-upload-with-firebase-storage/
+    }
+
+
+    public async showActionSheet(photo, position) {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Photos',
+            buttons: [{
+                text: 'Delete',
+                role: 'destructive',
+                icon: 'trash',
+                handler: () => {
+                    this.photoService.deletePicture(photo, position);
+                }
+            }, {
+                text: 'Cancel',
+                icon: 'close',
+                role: 'cancel',
+                handler: () => {
+                    // Nothing to do, action sheet is automatically closed
+                }
+            }]
+        });
+        await actionSheet.present();
     }
 
 

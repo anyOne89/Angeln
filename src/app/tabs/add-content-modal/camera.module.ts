@@ -15,7 +15,7 @@ const routes: Routes = [
         path: '', component: CameraPage,
     },
     {
-        path: 'edit', component: CameraPage,
+        path: 'edit', component: CameraEditCardComponent,
     }
 ];
 
@@ -28,7 +28,6 @@ const routes: Routes = [
 
     declarations: [CameraPage, CameraEditCardComponent],
     providers: [
-        CameraService
     ],
 })
 export class CameraModule {

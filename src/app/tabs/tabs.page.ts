@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {CameraPage} from './add-content-modal/camera-page.component';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
+import {UserService} from '../core/services/user.service';
+import {CameraService} from './add-content-modal/camera.service';
 
 @Component({
     selector: 'app-tabs',
@@ -10,7 +12,9 @@ import {Router} from "@angular/router";
 })
 export class TabsPage {
 
-    constructor(public modalController: ModalController, public router: Router) {
+    constructor(public modalController: ModalController,
+                public router: Router,
+                public cameraService: CameraService) {
     }
 
     onClickOpenModal() {
@@ -19,11 +23,8 @@ export class TabsPage {
 
 
     async presentModal() {
-        // const modal = await this.modalController.create({
-        //     component: CameraPage,
-        // });
-        // return await modal.present();
-
         this.router.navigate(['tabs/camera']);
     }
+
+
 }

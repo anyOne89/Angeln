@@ -60,41 +60,32 @@ export class CameraService {
     // Store a reference to all photo filepaths using Storage API:
     // https://capacitor.ionicframework.com/docs/apis/storage
     */
-    public async addNewToGallery() {
-        // Take a photo
-        const capturedPhoto = await Camera.getPhoto({
-            resultType: CameraResultType.Uri, // file-based data; provides best performance
-            source: CameraSource.Camera, // automatically take a new photo with the camera
-            quality: 50 // highest quality (0 to 100)
-        });
-
-        const savedImageFile = await this.savePicture(capturedPhoto);
-
-        // Add new photo to Photos array
-        this.photos.unshift(savedImageFile);
-
-        // Cache all photo data for future retrieval
-        Storage.set({
-            key: this.PHOTO_STORAGE,
-            // value: JSON.stringify(this.photos.map(p => {
-            //     // Don't save the base64 representation of the photo data,
-            //     // since it's already saved on the Filesystem
-            //     const photoCopy = {...p};
-            //     delete photoCopy.base64;
-            //
-            //     return photoCopy;
-            // }));
-
-            value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
-                // Don't save the base64 representation of the photo data,
-                // since it's already saved on the Filesystem
-                const photoCopy = {...p};
-                delete photoCopy.base64;
-
-                return photoCopy;
-            }))
-        });
-    }
+    // public async addNewToGallery() {
+    //     // Take a photo
+    //     const capturedPhoto = await Camera.getPhoto({
+    //         resultType: CameraResultType.Uri, // file-based data; provides best performance
+    //         source: CameraSource.Camera, // automatically take a new photo with the camera
+    //         quality: 50 // highest quality (0 to 100)
+    //     });
+    //
+    //     const savedImageFile = await this.savePicture(capturedPhoto);
+    //
+    //     // Add new photo to Photos array
+    //     this.photos.unshift(savedImageFile);
+    //
+    //     // Cache all photo data for future retrieval
+    //     Storage.set({
+    //         key: this.PHOTO_STORAGE,
+    //         value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
+    //             // Don't save the base64 representation of the photo data,
+    //             // since it's already saved on the Filesystem
+    //             const photoCopy = {...p};
+    //             delete photoCopy.base64;
+    //
+    //             return photoCopy;
+    //         }))
+    //     });
+    // }
 
     // Save picture to file on device
     private async savePicture(cameraPhoto: CameraPhoto) {
@@ -190,30 +181,47 @@ export class CameraService {
             resultType: CameraResultType.Uri, // file-based data; provides best performance
             source: sourceType, // automatically take a new photo with the camera
             quality: 50 // highest quality (0 to 100)
-        }
-
+        };
 
         Camera.getPhoto(options).then((imageData) => {
             // imageData is either a base64 encoded string or a file URI
             // If it's base64 (DATA_URL):
-            // let base64Image = 'data:image/jpeg;base64,' + imageData;
+            let base64Image = 'data:image/jpeg;base64,' + imageData;
+
+            this.savePicture(imageData).then(savedImageFile => {
+                this.photos.unshift(savedImageFile);
+            });
+
+            // Cache all photo data for future retrieval
+            Storage.set({
+                key: this.PHOTO_STORAGE,
+                value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
+                    // Don't save the base64 representation of the photo data,
+                    // since it's already saved on the Filesystem
+                    const photoCopy = {...p};
+                    delete photoCopy.base64;
+
+                    return photoCopy;
+                }))
+            });
         }, (err) => {
             // Handle error
         });
     }
 
-    async selectImage() {
-        // https://enappd.com/blog/image-picker-in-ionic-4-app/67/
+    async showImageActionSheet() {
         const actionSheet = await this.actionSheetController.create({
             header: 'Select Image source',
             buttons: [{
                 text: 'Load from Library',
+                icon: 'folder',
                 handler: () => {
                     this.pickImage(CameraSource.Photos);
                 }
             },
                 {
                     text: 'Use Camera',
+                    icon: 'camera',
                     handler: () => {
                         this.pickImage(CameraSource.Camera);
                     }

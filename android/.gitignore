@@ -1,4 +1,4 @@
-ionic cap run android -l --externalionic cap run android -l --external# NPM renames .gitignore to .npmignore
+# NPM renames .gitignore to .npmignore
 # In order to prevent that, we remove the initial "."
 # And the CLI then renames it
 

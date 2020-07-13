@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {CameraService} from '../camera.service';
 import {ActionSheetController} from '@ionic/angular';
 import {AngularFireStorage} from '@angular/fire/storage';
-import {UserService} from '../../../core/services/user.service';
-import {AngularFirestore} from '@angular/fire/firestore';
 
 @Component({
     selector: 'app-camera-edit-card',
@@ -23,31 +21,9 @@ export class CameraEditCardComponent implements OnInit {
 
     async uploadFile() {
 
-        this.afStorage.upload('/upload/to/this-path', ;
+        // this.afStorage.upload('/upload/to/this-path'
 
     }
 
-
-    public async showActionSheet(photo, position) {
-        const actionSheet = await this.actionSheetController.create({
-            header: 'Photos',
-            buttons: [{
-                text: 'Delete',
-                role: 'destructive',
-                icon: 'trash',
-                handler: () => {
-                    this.photoService.deletePicture(photo, position);
-                }
-            }, {
-                text: 'Cancel',
-                icon: 'close',
-                role: 'cancel',
-                handler: () => {
-                    // Nothing to do, action sheet is automatically closed
-                }
-            }]
-        });
-        await actionSheet.present();
-    }
 
 }
