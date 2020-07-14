@@ -26,6 +26,14 @@ export class CameraService {
                 public actionSheetController: ActionSheetController) {
     }
 
+    async showGallery() {
+        this.pickImage(CameraSource.Photos);
+    }
+
+    async showCamera() {
+        this.pickImage(CameraSource.Camera);
+    }
+
     async showImageActionSheet() {
         const actionSheet = await this.actionSheetController.create({
             header: 'Select Image source',
