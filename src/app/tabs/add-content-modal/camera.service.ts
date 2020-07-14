@@ -26,40 +26,6 @@ export class CameraService {
                 public actionSheetController: ActionSheetController) {
     }
 
-    async showGallery() {
-        this.pickImage(CameraSource.Photos);
-    }
-
-    async showCamera() {
-        this.pickImage(CameraSource.Camera);
-    }
-
-    async showImageActionSheet() {
-        const actionSheet = await this.actionSheetController.create({
-            header: 'Select Image source',
-            buttons: [{
-                text: 'Load from Library',
-                icon: 'folder',
-                handler: () => {
-                    this.pickImage(CameraSource.Photos);
-                }
-            },
-                {
-                    text: 'Use Camera',
-                    icon: 'camera',
-                    handler: () => {
-                        this.pickImage(CameraSource.Camera);
-                    }
-                },
-                {
-                    text: 'Cancel',
-                    icon: 'close',
-                    role: 'cancel'
-                }
-            ]
-        });
-        await actionSheet.present();
-    }
 
     /* Use the device camera to take a photo:
     // https://capacitor.ionicframework.com/docs/apis/camera
@@ -70,7 +36,7 @@ export class CameraService {
     // Store a reference to all photo filepaths using Storage API:
     // https://capacitor.ionicframework.com/docs/apis/storage
     */
-    private pickImage(sourceType) {
+    public pickImage(sourceType) {
         Camera.getPhoto({
             resultType: CameraResultType.Uri, // file-based data; provides best performance
             source: sourceType, // automatically take a new photo with the camera

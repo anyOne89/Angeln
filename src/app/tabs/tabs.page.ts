@@ -1,9 +1,10 @@
 import {Component, EventEmitter} from '@angular/core';
-import {ModalController} from '@ionic/angular';
+import {ActionSheetController, ModalController} from '@ionic/angular';
 import {CameraPage} from './add-content-modal/camera-page.component';
 import {Router} from '@angular/router';
 import {UserService} from '../core/services/user.service';
 import {CameraService} from './add-content-modal/camera.service';
+import {CameraSource} from "@capacitor/core";
 
 @Component({
     selector: 'app-tabs',
@@ -15,7 +16,8 @@ export class TabsPage {
 
     constructor(public modalController: ModalController,
                 public router: Router,
-                public cameraService: CameraService) {
+                public cameraService: CameraService,
+                public actionSheetController: ActionSheetController) {
     }
 
 
@@ -25,5 +27,45 @@ export class TabsPage {
         } else {
             this.isCameraTabSelected = false;
         }
+    }
+
+
+    async showImageActionSheet() {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Action',
+            buttons: [
+                {
+                    text: 'Einchecken zum Angeln',
+                    icon: 'locate-outline',
+                    handler: () => {
+                        this.cameraService.pickImage(CameraSource.Camera);
+                    }
+                },
+                {
+                    text: 'Load from Library',
+                    icon: 'folder',
+                    handler: () => {
+                        this.cameraService.pickImage(CameraSource.Photos);
+                    }
+                },
+                {
+                    text: 'Use Camera',
+                    icon: 'camera',
+                    handler: () => {
+                        this.cameraService.pickImage(CameraSource.Camera);
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    icon: 'close',
+                    role: 'cancel',
+                    handler: () => {
+                        // TODO: go back to last page
+                        console.log('CLOOOOSE');
+                    }
+                }
+            ]
+        });
+        await actionSheet.present();
     }
 }

@@ -1,17 +1,14 @@
 <ion-header translucent>
     <ion-toolbar>
-        <ion-title>Modal Content</ion-title>
+        <ion-title>Neuer Fang</ion-title>
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="/"></ion-back-button>
+            <ion-back-button text="" icon="close" defaultHref="/"></ion-back-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 
 <ion-content>
-
-    <ion-button>dd</ion-button>
-
     <ion-grid>
         <ion-row>
             <ion-col size="4" *ngFor="let photo of photoService.photos; index as position">
@@ -24,19 +21,19 @@
     <app-camera-edit-card></app-camera-edit-card>
 
 
-    <ion-tabs>
-        <ion-tab-bar slot="bottom">
-            <ion-tab-button (click)="photoService.showGallery()">
-                <ion-icon name="images-outline"></ion-icon>
-                <ion-label></ion-label>
-            </ion-tab-button>
+    <!--    <ion-tabs>-->
+    <!--        <ion-tab-bar slot="bottom">-->
+    <!--            <ion-tab-button (click)="photoService.showGallery()">-->
+    <!--                <ion-icon name="images-outline"></ion-icon>-->
+    <!--                <ion-label></ion-label>-->
+    <!--            </ion-tab-button>-->
 
-            <ion-tab-button (click)="photoService.showCamera()">
-                <ion-icon name="camera-outline"></ion-icon>
-                <ion-label></ion-label>
-            </ion-tab-button>
-        </ion-tab-bar>
-    </ion-tabs>
+    <!--            <ion-tab-button (click)="photoService.showCamera()">-->
+    <!--                <ion-icon name="camera-outline"></ion-icon>-->
+    <!--                <ion-label></ion-label>-->
+    <!--            </ion-tab-button>-->
+    <!--        </ion-tab-bar>-->
+    <!--    </ion-tabs>-->
 
 </ion-content>
 

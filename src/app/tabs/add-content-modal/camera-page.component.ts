@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActionSheetController, ModalController} from '@ionic/angular';
 
-import {Plugins} from '@capacitor/core';
+import {CameraSource, Plugins} from '@capacitor/core';
 import {CameraService} from './camera.service';
 import {UserService} from '../../core/services/user.service';
 
@@ -33,6 +33,8 @@ export class CameraPage implements OnInit {
     selectPhoto(): void {
         // https://indepth.dev/implement-file-upload-with-firebase-storage/
     }
+
+
 
 
     public async showActionSheet(photo, position) {
