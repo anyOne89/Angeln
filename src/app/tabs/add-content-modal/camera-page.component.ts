@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActionSheetController, ModalController} from '@ionic/angular';
+import {ActionSheetController, ModalController, NavController} from '@ionic/angular';
 
 import {CameraSource, Plugins} from '@capacitor/core';
 import {CameraService} from './camera.service';
@@ -22,16 +22,12 @@ export class CameraPage implements OnInit {
     constructor(private modalCtrl: ModalController,
                 public photoService: CameraService,
                 public actionSheetController: ActionSheetController,
-                private userService: UserService) {
+                private userService: UserService,
+                public nav: NavController) {
     }
 
     ngOnInit() {
 
-    }
-
-
-    selectPhoto(): void {
-        // https://indepth.dev/implement-file-upload-with-firebase-storage/
     }
 
 

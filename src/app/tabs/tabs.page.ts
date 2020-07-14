@@ -13,6 +13,7 @@ import {CameraSource} from "@capacitor/core";
 })
 export class TabsPage {
     public isCameraTabSelected: boolean;
+    private lastTabBeforeCamera: string;
 
     constructor(public modalController: ModalController,
                 public router: Router,
@@ -26,6 +27,7 @@ export class TabsPage {
             this.isCameraTabSelected = true;
         } else {
             this.isCameraTabSelected = false;
+            this.lastTabBeforeCamera = $event.tab;
         }
     }
 
@@ -60,8 +62,7 @@ export class TabsPage {
                     icon: 'close',
                     role: 'cancel',
                     handler: () => {
-                        // TODO: go back to last page
-                        console.log('CLOOOOSE');
+                        this.router.navigate(['tabs/' + this.lastTabBeforeCamera]);
                     }
                 }
             ]
