@@ -27,6 +27,7 @@ import {MeinsPageService} from './tabs/meins/meins-page.service';
         BrowserModule,
         FormsModule,
         IonicModule.forRoot(),
+
         AngularFireAuthModule,
         AngularFireDatabaseModule,
         AngularFirestoreModule,

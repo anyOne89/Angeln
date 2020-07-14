@@ -26,6 +26,73 @@ export class CameraService {
                 public actionSheetController: ActionSheetController) {
     }
 
+    async showImageActionSheet() {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Select Image source',
+            buttons: [{
+                text: 'Load from Library',
+                icon: 'folder',
+                handler: () => {
+                    this.pickImage(CameraSource.Photos);
+                }
+            },
+                {
+                    text: 'Use Camera',
+                    icon: 'camera',
+                    handler: () => {
+                        this.pickImage(CameraSource.Camera);
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    icon: 'close',
+                    role: 'cancel'
+                }
+            ]
+        });
+        await actionSheet.present();
+    }
+
+    /* Use the device camera to take a photo:
+    // https://capacitor.ionicframework.com/docs/apis/camera
+
+    // Store the photo data into permanent file storage:
+    // https://capacitor.ionicframework.com/docs/apis/filesystem
+
+    // Store a reference to all photo filepaths using Storage API:
+    // https://capacitor.ionicframework.com/docs/apis/storage
+    */
+    private pickImage(sourceType) {
+        Camera.getPhoto({
+            resultType: CameraResultType.Uri, // file-based data; provides best performance
+            source: sourceType, // automatically take a new photo with the camera
+            quality: 50 // highest quality (0 to 100)
+        }).then((imageData) => {
+            // imageData is either a base64 encoded string or a file URI
+            // If it's base64 (DATA_URL):
+            // let base64Image = 'data:image/jpeg;base64,' + imageData;
+
+            this.savePicture(imageData).then(savedImageFile => {
+                this.photos.unshift(savedImageFile);
+            });
+
+            // Cache all photo data for future retrieval
+            Storage.set({
+                key: this.PHOTO_STORAGE,
+                value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
+                    // Don't save the base64 representation of the photo data,
+                    // since it's already saved on the Filesystem
+                    const photoCopy = {...p};
+                    delete photoCopy.base64;
+
+                    return photoCopy;
+                }))
+            });
+        }, (err) => {
+            // Handle error
+        });
+    }
+
     public async loadSaved() {
         // Retrieve cached photo array data
         const photos = await Storage.get({key: this.PHOTO_STORAGE});
@@ -46,46 +113,8 @@ export class CameraService {
                 photo.base64 = `data:image/jpeg;base64,${readFile.data}`;
             }
         }
-
         return this.photos;
     }
-
-
-    /* Use the device camera to take a photo:
-    // https://capacitor.ionicframework.com/docs/apis/camera
-
-    // Store the photo data into permanent file storage:
-    // https://capacitor.ionicframework.com/docs/apis/filesystem
-
-    // Store a reference to all photo filepaths using Storage API:
-    // https://capacitor.ionicframework.com/docs/apis/storage
-    */
-    // public async addNewToGallery() {
-    //     // Take a photo
-    //     const capturedPhoto = await Camera.getPhoto({
-    //         resultType: CameraResultType.Uri, // file-based data; provides best performance
-    //         source: CameraSource.Camera, // automatically take a new photo with the camera
-    //         quality: 50 // highest quality (0 to 100)
-    //     });
-    //
-    //     const savedImageFile = await this.savePicture(capturedPhoto);
-    //
-    //     // Add new photo to Photos array
-    //     this.photos.unshift(savedImageFile);
-    //
-    //     // Cache all photo data for future retrieval
-    //     Storage.set({
-    //         key: this.PHOTO_STORAGE,
-    //         value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
-    //             // Don't save the base64 representation of the photo data,
-    //             // since it's already saved on the Filesystem
-    //             const photoCopy = {...p};
-    //             delete photoCopy.base64;
-    //
-    //             return photoCopy;
-    //         }))
-    //     });
-    // }
 
     // Save picture to file on device
     private async savePicture(cameraPhoto: CameraPhoto) {
@@ -154,7 +183,7 @@ export class CameraService {
         });
     }
 
-    convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+    private convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onerror = reject;
         reader.onload = () => {
@@ -173,67 +202,6 @@ export class CameraService {
             downloadUrl$: undefined,
             uploadProgress$: uploadTask.percentageChanges()
         };
-    }
-
-
-    pickImage(sourceType) {
-        const options: CameraOptions = {
-            resultType: CameraResultType.Uri, // file-based data; provides best performance
-            source: sourceType, // automatically take a new photo with the camera
-            quality: 50 // highest quality (0 to 100)
-        };
-
-        Camera.getPhoto(options).then((imageData) => {
-            // imageData is either a base64 encoded string or a file URI
-            // If it's base64 (DATA_URL):
-            let base64Image = 'data:image/jpeg;base64,' + imageData;
-
-            this.savePicture(imageData).then(savedImageFile => {
-                this.photos.unshift(savedImageFile);
-            });
-
-            // Cache all photo data for future retrieval
-            Storage.set({
-                key: this.PHOTO_STORAGE,
-                value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
-                    // Don't save the base64 representation of the photo data,
-                    // since it's already saved on the Filesystem
-                    const photoCopy = {...p};
-                    delete photoCopy.base64;
-
-                    return photoCopy;
-                }))
-            });
-        }, (err) => {
-            // Handle error
-        });
-    }
-
-    async showImageActionSheet() {
-        const actionSheet = await this.actionSheetController.create({
-            header: 'Select Image source',
-            buttons: [{
-                text: 'Load from Library',
-                icon: 'folder',
-                handler: () => {
-                    this.pickImage(CameraSource.Photos);
-                }
-            },
-                {
-                    text: 'Use Camera',
-                    icon: 'camera',
-                    handler: () => {
-                        this.pickImage(CameraSource.Camera);
-                    }
-                },
-                {
-                    text: 'Cancel',
-                    icon: 'close',
-                    role: 'cancel'
-                }
-            ]
-        });
-        await actionSheet.present();
     }
 
 }

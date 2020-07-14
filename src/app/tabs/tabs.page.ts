@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {CameraPage} from './add-content-modal/camera-page.component';
 import {Router} from '@angular/router';
@@ -11,20 +11,19 @@ import {CameraService} from './add-content-modal/camera.service';
     styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
+    public isCameraTabSelected: boolean;
 
     constructor(public modalController: ModalController,
                 public router: Router,
                 public cameraService: CameraService) {
     }
 
-    onClickOpenModal() {
-        this.presentModal();
+
+    transition($event: { tab: string }) {
+        if ($event.tab === 'camera') {
+            this.isCameraTabSelected = true;
+        } else {
+            this.isCameraTabSelected = false;
+        }
     }
-
-
-    async presentModal() {
-        this.router.navigate(['tabs/camera']);
-    }
-
-
 }
