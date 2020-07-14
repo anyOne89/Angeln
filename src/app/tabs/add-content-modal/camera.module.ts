@@ -9,6 +9,7 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
 import {CameraService} from './camera.service';
 import {CameraEditCardComponent} from './camera-edit-card/camera-edit-card.component';
+import {FormsModule} from '@angular/forms';
 
 const routes: Routes = [
     {
@@ -23,7 +24,8 @@ const routes: Routes = [
     imports: [
         RouterModule.forChild(routes),
         CommonModule,
-        IonicModule
+        IonicModule,
+        FormsModule
     ],
 
     declarations: [CameraPage, CameraEditCardComponent],

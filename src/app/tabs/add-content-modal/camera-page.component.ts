@@ -18,19 +18,17 @@ export class CameraPage implements OnInit {
     file: File;
     imgsrc;
     progressBarValue;
+    public fangZeit: string = new Date().toISOString();
 
     constructor(private modalCtrl: ModalController,
                 public photoService: CameraService,
                 public actionSheetController: ActionSheetController,
-                private userService: UserService,
-                public nav: NavController) {
+                private userService: UserService) {
     }
 
     ngOnInit() {
 
     }
-
-
 
 
     public async showActionSheet(photo, position) {
@@ -56,4 +54,10 @@ export class CameraPage implements OnInit {
     }
 
 
+    getCurrentDate() {
+        const date = new Date();
+        const dateC = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+        const time = date.getHours() + ':' + date.getMinutes();
+        // this.fangZeit = dateC + ' - ' + time;
+    }
 }
