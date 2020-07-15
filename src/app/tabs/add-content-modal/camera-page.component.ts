@@ -18,7 +18,9 @@ export class CameraPage implements OnInit {
     file: File;
     imgsrc;
     progressBarValue;
+    
     public fangZeit: string = new Date().toISOString();
+    cm: number;
 
     constructor(private modalCtrl: ModalController,
                 public photoService: CameraService,

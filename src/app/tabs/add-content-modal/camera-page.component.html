@@ -44,8 +44,12 @@
 
         <ion-item>
             <ion-label>GROESE</ion-label>
-            <ion-input [ngStyle]="{'text-align' : 'right'}" type="tel" maxlength="3" minlength="1"
-                       pattern="[0-9]"></ion-input>
+            <ion-input [ngStyle]="{'text-align' : 'right'}"
+                       type="tel"
+                       maxlength="3"
+                       minlength="1"
+                       pattern="[0-9]"
+                       [(ngModel)]="cm"></ion-input>
             <ion-label [ngStyle]="{'margin-left' : '6px'}"> cm</ion-label>
         </ion-item>
 
