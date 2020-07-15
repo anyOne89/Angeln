@@ -57,7 +57,8 @@ export class CameraService {
                     // Don't save the base64 representation of the photo data,
                     // since it's already saved on the Filesystem
                     const photoCopy = {...p};
-                    delete photoCopy.base64;
+
+                    // delete photoCopy.base64;
 
                     return photoCopy;
                 }))
@@ -168,6 +169,8 @@ export class CameraService {
 
 
     uploadFileAndGetMetadata(mediaFolderPath: string, fileToUpload: File): FilesUploadMetadata {
+        // const filePath = `${mediaFolderPath}/${new Date().getTime()}_${fileToUpload.name}`;
+
         const filePath = `${mediaFolderPath}/${new Date().getTime()}_${fileToUpload.name}`;
         const uploadTask: AngularFireUploadTask = this.storage.upload(filePath, fileToUpload);
 
