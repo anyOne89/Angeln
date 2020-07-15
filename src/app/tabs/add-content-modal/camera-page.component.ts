@@ -21,7 +21,9 @@ export class CameraPage implements OnInit {
     file: File;
     imgsrc;
     progressBarValue;
+    
     public fangZeit: string = new Date().toISOString();
+    cm: number;
 
 
     // upload image
