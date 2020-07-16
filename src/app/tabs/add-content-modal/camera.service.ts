@@ -22,30 +22,18 @@ export class CameraService {
     private PHOTO_STORAGE = 'photos';
 
     constructor(public platform: Platform,
-                private storage: AngularFireStorage,
-                public actionSheetController: ActionSheetController) {
+                private storage: AngularFireStorage) {
     }
 
-
-    /* Use the device camera to take a photo:
-    // https://capacitor.ionicframework.com/docs/apis/camera
-
-    // Store the photo data into permanent file storage:
-    // https://capacitor.ionicframework.com/docs/apis/filesystem
-
-    // Store a reference to all photo filepaths using Storage API:
-    // https://capacitor.ionicframework.com/docs/apis/storage
-    */
     public pickImage(sourceType) {
         Camera.getPhoto({
-            resultType: CameraResultType.Uri, // file-based data; provides best performance
-            source: sourceType, // automatically take a new photo with the camera
-            quality: 50 // highest quality (0 to 100)
-        }).then((imageData) => {
-            // imageData is either a base64 encoded string or a file URI
-            // If it's base64 (DATA_URL):
-            // let base64Image = 'data:image/jpeg;base64,' + imageData;
-
+            resultType: CameraResultType.DataUrl,
+            allowEditing: true,
+            saveToGallery: true,
+            correctOrientation: true,
+            quality: 100,
+            source: CameraSource.Camera
+        }).then((imageData: CameraPhoto) => {
             this.savePicture(imageData).then(savedImageFile => {
                 this.photos.unshift(savedImageFile);
             });
@@ -57,9 +45,7 @@ export class CameraService {
                     // Don't save the base64 representation of the photo data,
                     // since it's already saved on the Filesystem
                     const photoCopy = {...p};
-
-                    // delete photoCopy.base64;
-
+                    delete photoCopy.base64;
                     return photoCopy;
                 }))
             });
@@ -96,19 +82,22 @@ export class CameraService {
         // Convert photo to base64 format, required by Filesystem API to save
         const base64Data = await this.readAsBase64(cameraPhoto);
 
+
         const fileName = new Date().getTime() + '.jpeg';
-        const savedFile = await Filesystem.writeFile({
-            path: fileName,
-            data: base64Data,
-            directory: FilesystemDirectory.Data
-        });
+        // const savedFile = await Filesystem.writeFile({
+        //     path: fileName,
+        //     data: base64Data,
+        //     directory: FilesystemDirectory.Data
+        // });
 
         if (this.platform.is('hybrid')) {
             // Display the new image by rewriting the 'file://' path to HTTP
             // Details: https://ionicframework.com/docs/building/webview#file-protocol
             return {
-                filepath: savedFile.uri,
-                webviewPath: Capacitor.convertFileSrc(savedFile.uri),
+                // filepath: savedFile.uri,
+                // webviewPath: Capacitor.convertFileSrc(savedFile.uri),
+                filepath: cameraPhoto.path,
+                webviewPath: cameraPhoto.webPath,
             };
         } else {
             // Use webPath to display the new image instead of base64 since it's
@@ -120,21 +109,17 @@ export class CameraService {
         }
     }
 
-    // Read camera photo into base64 format based on the platform the app is running on
     private async readAsBase64(cameraPhoto: CameraPhoto): Promise<string> {
-        // "hybrid" will detect Cordova or Capacitor
         if (this.platform.is('hybrid')) {
-            // Read the file into base64 format
-            const file = await Filesystem.readFile({
-                path: cameraPhoto.path
-            });
-
-            return file.data;
+            // // Read the file into base64 format
+            // const file = await Filesystem.readFile({
+            //     path: cameraPhoto.path
+            // });
+            // return file.data;
+            return cameraPhoto.base64String;
         } else {
-            // Fetch the photo, read as a blob, then convert to base64 format
             const response = await fetch(cameraPhoto.webPath!);
             const blob = await response.blob();
-
             return await this.convertBlobToBase64(blob) as string;
         }
     }
