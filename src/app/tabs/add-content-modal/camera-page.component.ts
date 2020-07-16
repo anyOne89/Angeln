@@ -99,10 +99,7 @@ export class CameraPage implements OnInit {
 
     async captureImage() {
         const options: CameraOptions = {
-            resultType: CameraResultType.DataUrl,
-            allowEditing: true,
-            saveToGallery: true,
-            correctOrientation: true,
+            resultType: CameraResultType.Base64,
             quality: 100,
             source: CameraSource.Camera
         };
@@ -110,19 +107,14 @@ export class CameraPage implements OnInit {
         return await Camera.getPhoto(options);
     }
 
-    /**
-     * @param image The url starting with 'data:image/jpeg;base64,'
-     * and the base64 encoded string representation of the image, if using CameraResultType.DataUrl.
-     */
-    createUploadTask(image: string): void {
+    createUploadTask(file: string): void {
 
 
         const filePath = `user/${this.userService.getUserEmail()}/${new Date().getTime()}.jpg`;
 
-        // this.image = 'data:image/jpg;base64,' + file;
-        this.task = this.storage.ref(filePath).putString(image, 'data_url');
+        this.image = 'data:image/jpg;base64,' + file;
+        this.task = this.storage.ref(filePath).putString(this.image, 'data_url');
 
         this.progress = this.task.percentageChanges();
     }
-
 }

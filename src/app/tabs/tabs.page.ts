@@ -4,7 +4,7 @@ import {CameraPage} from './add-content-modal/camera-page.component';
 import {Router} from '@angular/router';
 import {UserService} from '../core/services/user.service';
 import {CameraService} from './add-content-modal/camera.service';
-import {CameraSource} from "@capacitor/core";
+import {CameraSource} from '@capacitor/core';
 
 @Component({
     selector: 'app-tabs',

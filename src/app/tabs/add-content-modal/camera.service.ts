@@ -11,6 +11,7 @@ import {
 import {ActionSheetController, Platform} from '@ionic/angular';
 import {AngularFireStorage, AngularFireUploadTask} from '@angular/fire/storage';
 import {Observable} from 'rxjs';
+import {UserService} from '../../core/services/user.service';
 
 const {Camera, Filesystem, Storage} = Plugins;
 
@@ -21,9 +22,57 @@ export class CameraService {
     public photos: Photo[] = [];
     private PHOTO_STORAGE = 'photos';
 
+
+    task: AngularFireUploadTask;
+    progress: Observable<number | undefined>;  // Observable 0 to 100
+    image: string; // base64
+
     constructor(public platform: Platform,
-                private storage: AngularFireStorage) {
+                private storage: AngularFireStorage,
+                private userService: UserService) {
     }
+
+
+    public pickImagre() {
+        Camera.getPhoto({
+            resultType: CameraResultType.DataUrl,
+            allowEditing: true,
+            saveToGallery: true,
+            correctOrientation: true,
+            quality: 60,
+            source: CameraSource.Camera
+        }).then((imageData: CameraPhoto) => {
+
+
+            const filePath = `user/${this.userService.getUserEmail()}/${new Date().getTime()}.jpg`;
+
+            this.image = 'data:image/jpg;base64,' + imageData.base64String;
+            this.task = this.storage.ref(filePath).putString(this.image, 'data_url');
+
+            this.progress = this.task.percentageChanges();
+
+
+            this.photos.unshift({
+                filepath: imageData.path,
+                webviewPath: imageData.webPath,
+                base64: imageData.base64String,
+            });
+
+            // Cache all photo data for future retrieval
+            Storage.set({
+                key: this.PHOTO_STORAGE,
+                value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
+                    // Don't save the base64 representation of the photo data, since it's already saved on the Filesystem
+                    const photoCopy = {...p};
+                    // delete photoCopy.base64;
+                    return photoCopy;
+                }))
+            });
+        }, (err) => {
+            // Handle error
+        });
+    }
+
 
     public pickImage(sourceType) {
         Camera.getPhoto({
@@ -31,21 +80,32 @@ export class CameraService {
             allowEditing: true,
             saveToGallery: true,
             correctOrientation: true,
-            quality: 100,
-            source: CameraSource.Camera
+            quality: 60,
+            source: sourceType
         }).then((imageData: CameraPhoto) => {
-            this.savePicture(imageData).then(savedImageFile => {
-                this.photos.unshift(savedImageFile);
+
+
+            const filePath = `user/${this.userService.getUserEmail()}/${new Date().getTime()}.jpg`;
+
+            this.image = 'data:image/jpg;base64,' + imageData.base64String;
+            this.task = this.storage.ref(filePath).putString(this.image, 'data_url');
+
+            this.progress = this.task.percentageChanges();
+
+
+            this.photos.unshift({
+                filepath: imageData.path,
+                webviewPath: imageData.webPath,
+                base64: imageData.base64String,
             });
 
             // Cache all photo data for future retrieval
             Storage.set({
                 key: this.PHOTO_STORAGE,
                 value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
-                    // Don't save the base64 representation of the photo data,
-                    // since it's already saved on the Filesystem
+                    // Don't save the base64 representation of the photo data, since it's already saved on the Filesystem
                     const photoCopy = {...p};
-                    delete photoCopy.base64;
+                    // delete photoCopy.base64;
                     return photoCopy;
                 }))
             });
@@ -77,53 +137,6 @@ export class CameraService {
         return this.photos;
     }
 
-    // Save picture to file on device
-    private async savePicture(cameraPhoto: CameraPhoto) {
-        // Convert photo to base64 format, required by Filesystem API to save
-        const base64Data = await this.readAsBase64(cameraPhoto);
-
-
-        const fileName = new Date().getTime() + '.jpeg';
-        // const savedFile = await Filesystem.writeFile({
-        //     path: fileName,
-        //     data: base64Data,
-        //     directory: FilesystemDirectory.Data
-        // });
-
-        if (this.platform.is('hybrid')) {
-            // Display the new image by rewriting the 'file://' path to HTTP
-            // Details: https://ionicframework.com/docs/building/webview#file-protocol
-            return {
-                // filepath: savedFile.uri,
-                // webviewPath: Capacitor.convertFileSrc(savedFile.uri),
-                filepath: cameraPhoto.path,
-                webviewPath: cameraPhoto.webPath,
-            };
-        } else {
-            // Use webPath to display the new image instead of base64 since it's
-            // already loaded into memory
-            return {
-                filepath: fileName,
-                webviewPath: cameraPhoto.webPath
-            };
-        }
-    }
-
-    private async readAsBase64(cameraPhoto: CameraPhoto): Promise<string> {
-        if (this.platform.is('hybrid')) {
-            // // Read the file into base64 format
-            // const file = await Filesystem.readFile({
-            //     path: cameraPhoto.path
-            // });
-            // return file.data;
-            return cameraPhoto.base64String;
-        } else {
-            const response = await fetch(cameraPhoto.webPath!);
-            const blob = await response.blob();
-            return await this.convertBlobToBase64(blob) as string;
-        }
-    }
-
     // Delete picture by removing it from reference data and the filesystem
     public async deletePicture(photo: Photo, position: number) {
         // Remove this photo from the Photos reference data array
@@ -142,16 +155,6 @@ export class CameraService {
             directory: FilesystemDirectory.Data
         });
     }
-
-    private convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = reject;
-        reader.onload = () => {
-            resolve(reader.result);
-        };
-        reader.readAsDataURL(blob);
-    });
-
 
     uploadFileAndGetMetadata(mediaFolderPath: string, fileToUpload: File): FilesUploadMetadata {
         // const filePath = `${mediaFolderPath}/${new Date().getTime()}_${fileToUpload.name}`;
