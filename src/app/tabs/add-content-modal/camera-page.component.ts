@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ActionSheetController, ModalController} from '@ionic/angular';
 
-import {CameraOptions, CameraResultType, CameraSource, Plugins} from '@capacitor/core';
+import {Plugins} from '@capacitor/core';
 import {CameraService} from './camera.service';
 import {UserService} from '../../core/services/user.service';
-import {AngularFireStorage, AngularFireUploadTask} from '@angular/fire/storage';
-import {Observable} from 'rxjs';
-import {FirebaseAddContentService} from "../../core/services/firebase-add-content.service";
+import {AngularFireStorage} from '@angular/fire/storage';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {FirebaseAddContentService} from '../../core/services/firebase-add-content.service';
 
 const {Camera, Filesystem, Storage} = Plugins;
 
@@ -28,19 +28,22 @@ export class CameraPage implements OnInit {
 
 
     // upload image
-
+    readonly cardDBSammlung = 'card';
+    newsItem: NewsIten;
+    newsItemRef: AngularFirestoreCollection<NewsIten>;
 
     constructor(private modalCtrl: ModalController,
                 public photoService: CameraService,
                 public actionSheetController: ActionSheetController,
                 public storage: AngularFireStorage,
                 private userService: UserService,
-                private firebaseAddContentService: FirebaseAddContentService
+                public afs: AngularFirestore
     ) {
     }
 
     ngOnInit() {
-
+        // TODO: better use userId
+        this.newsItemRef = this.afs.collection<NewsIten>('card');
     }
 
 
@@ -100,6 +103,17 @@ export class CameraPage implements OnInit {
     // }
 
     commitToFireBase() {
+        this.photoService.commitCatch().then(onFullfilled => {
+            const fullPath = onFullfilled.metadata.fullPath;
 
+            this.newsItem = {
+                date: '', fischArt: '', userID: '', userImageUrl: '',
+
+                userName: 'johann',
+                fishImageUrl: fullPath
+            };
+
+            this.newsItemRef.add(this.newsItem);
+        });
     }
 }

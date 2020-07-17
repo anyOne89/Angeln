@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {IonInfiniteScroll, IonRefresher} from '@ionic/angular';
-import {CardModel} from "./model/card-model";
+// import {CardModel} from "./model/card-model";
 
 @Component({
     selector: 'app-tab1',
@@ -10,7 +10,7 @@ import {CardModel} from "./model/card-model";
 export class NewsFeedPage {
     @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-    cards: CardModel;
+    // cards: CardModel;
 
     constructor() {
     }

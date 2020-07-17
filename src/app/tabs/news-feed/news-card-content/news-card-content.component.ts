@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CardModel} from '../news-feed/model/card-model';
+
 
 @Component({
     selector: 'app-news-card-content',
@@ -8,7 +8,6 @@ import {CardModel} from '../news-feed/model/card-model';
 })
 export class NewsCardContentComponent implements OnInit {
 
-    @Input() card: CardModel;
 
     constructor() {
     }

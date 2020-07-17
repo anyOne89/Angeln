@@ -1,11 +1,9 @@
 export interface Fang {
     uid: string;
     email: string;
-    firstName: string;
-    secondName: string;
+    name: string;
     birthDay: Date;
-    photoURL: string;
-    emailVerified: boolean;
+    photoURL?: string;
 
     aboutMe: string;
     interessen: string;

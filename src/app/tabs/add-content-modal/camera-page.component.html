@@ -13,33 +13,34 @@
         </ion-buttons>
 
 
-
     </ion-toolbar>
 </ion-header>
 
 
 <ion-content>
 
-    <ion-label>prograss: {{progress}}</ion-label>
+<!--    <ng-container *ngIf="progress | async as percent">-->
+<!--        <progress [value]="percent" max="100"></progress>-->
+<!--    </ng-container>-->
 
     <ion-list>
 
-<!--        <div scrollY="true" id="myFixZone">-->
-            <ion-item>
-                <ion-grid>
-                    <ion-row>
-                        <ion-col size="5" *ngFor="let photo of photoService.photos; index as position">
-                            <ion-img src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}"
-                                     (click)="showActionSheet(photo, position)"></ion-img>
-                            <ion-img src="{{ photo.webviewPath }}"
-                                     (click)="showActionSheet(photo, position)"></ion-img>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
+        <!--        <div scrollY="true" id="myFixZone">-->
+        <ion-item>
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="5" *ngFor="let photo of photoService.photos; index as position">
+                        <ion-img src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}"
+                                 (click)="showActionSheet(photo, position)"></ion-img>
+                        <ion-img src="{{ photo.webviewPath }}"
+                                 (click)="showActionSheet(photo, position)"></ion-img>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
 
-                <ion-input placeholder="Bildunterschrift verfassen..."></ion-input>
-            </ion-item>
-<!--        </div>-->
+            <ion-input placeholder="Bildunterschrift verfassen..."></ion-input>
+        </ion-item>
+        <!--        </div>-->
 
         <ion-item>
             <ion-label>ANGELST DU GERADE HIER?</ion-label>

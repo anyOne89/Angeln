@@ -25,7 +25,6 @@ export class CameraService {
 
     task: AngularFireUploadTask;
     progress: Observable<number | undefined>;  // Observable 0 to 100
-    image: string; // base64
 
     constructor(public platform: Platform,
                 private storage: AngularFireStorage,
@@ -34,26 +33,21 @@ export class CameraService {
 
     public pickImage(sourceType) {
         Camera.getPhoto({
-            resultType: CameraResultType.DataUrl,
-            allowEditing: true,
+            resultType: CameraResultType.Uri,
             saveToGallery: true,
-            correctOrientation: true,
             quality: 60,
             source: sourceType
-        }).then((imageData: CameraPhoto) => {
+        }).then(async (imageData: CameraPhoto) => {
 
-            this.photos.unshift({
-                filepath: imageData.path,
-                webviewPath: imageData.webPath,
-                base64: `data:image/jpeg;base64,${imageData.base64String}`,
-            });
+            const savedImageFile = await this.savePicture(imageData);
+            this.photos.unshift(savedImageFile);
 
             Storage.set({
                 key: this.PHOTO_STORAGE,
                 value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
                     // Don't save the base64 representation of the photo data, since it's already saved on the Filesystem
                     const photoCopy = {...p};
-                    // delete photoCopy.base64;
+                    delete photoCopy.base64;
                     return photoCopy;
                 }))
             });
@@ -61,12 +55,37 @@ export class CameraService {
         });
     }
 
+    // Save picture to file on device
+    private async savePicture(cameraPhoto: CameraPhoto) {
+        if (this.platform.is('hybrid')) {
+            return {
+                filepath: cameraPhoto.path,
+                webviewPath: cameraPhoto.webPath,
+            };
+        }
+    }
 
-    public commitImage() {
+    // Read camera photo into base64 format based on the platform the app is running on
+    private async readAsBase64(pathp: string) {
+        if (this.platform.is('hybrid')) {
+            // Read the file into base64 format
+            const file = await Filesystem.readFile({
+                path: pathp
+            });
+
+            return 'data:image/jpg;base64,' + file.data;
+        }
+    }
+
+    public async commitCatch() {
         const filePath = `user/${this.userService.getUserEmail()}/catchfish/${new Date().getTime()}.jpg`;
-        // this.image = 'data:image/jpg;base64,' + this.photos[0].base64;
-        this.task = this.storage.ref(filePath).putString(this.photos[0].base64, 'data_url');
+
+        const base64 = await this.readAsBase64(this.photos[0].filepath);
+
+        this.task = this.storage.ref(filePath).putString(base64, 'data_url');
         this.progress = this.task.percentageChanges();
+
+        return this.task;
     }
 
     public async loadSaved() {
