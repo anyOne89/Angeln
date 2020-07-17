@@ -32,48 +32,6 @@ export class CameraService {
                 private userService: UserService) {
     }
 
-
-    public pickImagre() {
-        Camera.getPhoto({
-            resultType: CameraResultType.DataUrl,
-            allowEditing: true,
-            saveToGallery: true,
-            correctOrientation: true,
-            quality: 60,
-            source: CameraSource.Camera
-        }).then((imageData: CameraPhoto) => {
-
-
-            const filePath = `user/${this.userService.getUserEmail()}/${new Date().getTime()}.jpg`;
-
-            this.image = 'data:image/jpg;base64,' + imageData.base64String;
-            this.task = this.storage.ref(filePath).putString(this.image, 'data_url');
-
-            this.progress = this.task.percentageChanges();
-
-
-            this.photos.unshift({
-                filepath: imageData.path,
-                webviewPath: imageData.webPath,
-                base64: imageData.base64String,
-            });
-
-            // Cache all photo data for future retrieval
-            Storage.set({
-                key: this.PHOTO_STORAGE,
-                value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
-                    // Don't save the base64 representation of the photo data, since it's already saved on the Filesystem
-                    const photoCopy = {...p};
-                    // delete photoCopy.base64;
-                    return photoCopy;
-                }))
-            });
-        }, (err) => {
-            // Handle error
-        });
-    }
-
-
     public pickImage(sourceType) {
         Camera.getPhoto({
             resultType: CameraResultType.DataUrl,
@@ -84,22 +42,12 @@ export class CameraService {
             source: sourceType
         }).then((imageData: CameraPhoto) => {
 
-
-            const filePath = `user/${this.userService.getUserEmail()}/${new Date().getTime()}.jpg`;
-
-            this.image = 'data:image/jpg;base64,' + imageData.base64String;
-            this.task = this.storage.ref(filePath).putString(this.image, 'data_url');
-
-            this.progress = this.task.percentageChanges();
-
-
             this.photos.unshift({
                 filepath: imageData.path,
                 webviewPath: imageData.webPath,
-                base64: imageData.base64String,
+                base64: `data:image/jpeg;base64,${imageData.base64String}`,
             });
 
-            // Cache all photo data for future retrieval
             Storage.set({
                 key: this.PHOTO_STORAGE,
                 value: this.platform.is('hybrid') ? JSON.stringify(this.photos) : JSON.stringify(this.photos.map(p => {
@@ -110,8 +58,15 @@ export class CameraService {
                 }))
             });
         }, (err) => {
-            // Handle error
         });
+    }
+
+
+    public commitImage() {
+        const filePath = `user/${this.userService.getUserEmail()}/catchfish/${new Date().getTime()}.jpg`;
+        // this.image = 'data:image/jpg;base64,' + this.photos[0].base64;
+        this.task = this.storage.ref(filePath).putString(this.photos[0].base64, 'data_url');
+        this.progress = this.task.percentageChanges();
     }
 
     public async loadSaved() {
@@ -156,25 +111,25 @@ export class CameraService {
         });
     }
 
-    uploadFileAndGetMetadata(mediaFolderPath: string, fileToUpload: File): FilesUploadMetadata {
-        // const filePath = `${mediaFolderPath}/${new Date().getTime()}_${fileToUpload.name}`;
-
-        const filePath = `${mediaFolderPath}/${new Date().getTime()}_${fileToUpload.name}`;
-        const uploadTask: AngularFireUploadTask = this.storage.upload(filePath, fileToUpload);
-
-
-        return {
-            downloadUrl$: undefined,
-            uploadProgress$: uploadTask.percentageChanges()
-        };
-    }
+    // uploadFileAndGetMetadata(mediaFolderPath: string, fileToUpload: File): FilesUploadMetadata {
+    //     // const filePath = `${mediaFolderPath}/${new Date().getTime()}_${fileToUpload.name}`;
+    //
+    //     const filePath = `${mediaFolderPath}/${new Date().getTime()}_${fileToUpload.name}`;
+    //     const uploadTask: AngularFireUploadTask = this.storage.upload(filePath, fileToUpload);
+    //
+    //
+    //     return {
+    //         downloadUrl$: undefined,
+    //         uploadProgress$: uploadTask.percentageChanges()
+    //     };
+    // }
 
 }
 
-export interface FilesUploadMetadata {
-    uploadProgress$: Observable<number>;
-    downloadUrl$: Observable<string>;
-}
+// export interface FilesUploadMetadata {
+//     uploadProgress$: Observable<number>;
+//     downloadUrl$: Observable<string>;
+// }
 
 
 

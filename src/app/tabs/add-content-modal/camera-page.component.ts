@@ -6,6 +6,7 @@ import {CameraService} from './camera.service';
 import {UserService} from '../../core/services/user.service';
 import {AngularFireStorage, AngularFireUploadTask} from '@angular/fire/storage';
 import {Observable} from 'rxjs';
+import {FirebaseAddContentService} from "../../core/services/firebase-add-content.service";
 
 const {Camera, Filesystem, Storage} = Plugins;
 
@@ -27,15 +28,14 @@ export class CameraPage implements OnInit {
 
 
     // upload image
-    task: AngularFireUploadTask;
-    progress: Observable<number | undefined>;  // Observable 0 to 100
-    image: string; // base64
+
 
     constructor(private modalCtrl: ModalController,
                 public photoService: CameraService,
                 public actionSheetController: ActionSheetController,
                 public storage: AngularFireStorage,
                 private userService: UserService,
+                private firebaseAddContentService: FirebaseAddContentService
     ) {
     }
 
@@ -77,44 +77,29 @@ export class CameraPage implements OnInit {
     }
 
 
-    // createUploadTask(): void {
-    //     // createUploadTask(file: string): void {
+    // async uploadHandler() {
+    //     const base64 = await this.captureImage();
+    //     this.createUploadTask(base64.base64String);
+    // }
     //
-    //     const file = this.photoService.photos[0].base64;
+    // async captureImage() {
+    //     const options: CameraOptions = {
+    //         resultType: CameraResultType.Base64,
+    //         quality: 100,
+    //         source: CameraSource.Camera
+    //     };
     //
+    //     return await Camera.getPhoto(options);
+    // }
+    //
+    // createUploadTask(file: string): void {
     //     const filePath = `user/${this.userService.getUserEmail()}/${new Date().getTime()}.jpg`;
-    //
-    //     console.log('filePath', filePath);
-    //
     //     this.image = 'data:image/jpg;base64,' + file;
-    //     this.task = this.storage.ref(filePath).putString(this.image, 'base64', { contentType: 'image/png' });
+    //     this.task = this.storage.ref(filePath).putString(this.image, 'data_url');
     //     this.progress = this.task.percentageChanges();
     // }
 
+    commitToFireBase() {
 
-    async uploadHandler() {
-        const base64 = await this.captureImage();
-        this.createUploadTask(base64.base64String);
-    }
-
-    async captureImage() {
-        const options: CameraOptions = {
-            resultType: CameraResultType.Base64,
-            quality: 100,
-            source: CameraSource.Camera
-        };
-
-        return await Camera.getPhoto(options);
-    }
-
-    createUploadTask(file: string): void {
-
-
-        const filePath = `user/${this.userService.getUserEmail()}/${new Date().getTime()}.jpg`;
-
-        this.image = 'data:image/jpg;base64,' + file;
-        this.task = this.storage.ref(filePath).putString(this.image, 'data_url');
-
-        this.progress = this.task.percentageChanges();
     }
 }

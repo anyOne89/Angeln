@@ -9,7 +9,7 @@
         </ion-buttons>
 
         <ion-buttons slot="end">
-            <ion-button color="secondary" (click)="photoService.pickImagre()">Teilen</ion-button>
+            <ion-button color="secondary" (click)="commitToFireBase()">Teilen</ion-button>
         </ion-buttons>
 
 
@@ -30,6 +30,8 @@
                     <ion-row>
                         <ion-col size="5" *ngFor="let photo of photoService.photos; index as position">
                             <ion-img src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}"
+                                     (click)="showActionSheet(photo, position)"></ion-img>
+                            <ion-img src="{{ photo.webviewPath }}"
                                      (click)="showActionSheet(photo, position)"></ion-img>
                         </ion-col>
                     </ion-row>
