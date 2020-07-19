@@ -35,8 +35,8 @@ export class CameraService {
         Camera.getPhoto({
             resultType: CameraResultType.Uri,
             saveToGallery: true,
-            quality: 60,
-            source: sourceType
+            quality: 50,
+            source: sourceType,
         }).then(async (imageData: CameraPhoto) => {
 
             const savedImageFile = await this.savePicture(imageData);
@@ -72,7 +72,6 @@ export class CameraService {
             const file = await Filesystem.readFile({
                 path: pathp
             });
-
             return 'data:image/jpg;base64,' + file.data;
         }
     }

@@ -15,7 +15,9 @@ interface NewsIten {
     ort?: string;
     likes?: Map<string, number>;
     imageComment?: string;
-    kommentare?: string[];
+
+    // Other Users Commentss
+    // kommentare?: string[];
 
     // IMAGE FISH
     fishImageUrl: string;

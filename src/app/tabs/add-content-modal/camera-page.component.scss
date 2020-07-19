@@ -1,0 +1,11 @@
+
+.borderfooter {
+  border-top: 0.5px solid white;
+}
+
+
+ion-item {
+  --border-color: black; // default underline color
+  --highlight-color-invalid: black; // invalid underline color
+  --highlight-color-valid: black; // valid underline color
+}

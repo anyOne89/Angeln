@@ -3,7 +3,7 @@
         <ion-title>Neuer Fang</ion-title>
 
         <ion-buttons slot="start">
-            <ion-button>
+            <ion-button (click)="close()">
                 <ion-icon slot="icon-only" name="close"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -19,41 +19,32 @@
 
 <ion-content>
 
-<!--    <ng-container *ngIf="progress | async as percent">-->
-<!--        <progress [value]="percent" max="100"></progress>-->
-<!--    </ng-container>-->
 
     <ion-list>
-
-        <!--        <div scrollY="true" id="myFixZone">-->
         <ion-item>
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="5" *ngFor="let photo of photoService.photos; index as position">
-                        <ion-img src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}"
-                                 (click)="showActionSheet(photo, position)"></ion-img>
-                        <ion-img src="{{ photo.webviewPath }}"
-                                 (click)="showActionSheet(photo, position)"></ion-img>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+            <ion-thumbnail *ngIf="photoService.photos.length <=0">
+                <ion-img src="../../../assets/icon/placeholder"></ion-img>
+            </ion-thumbnail>
+            <ion-thumbnail *ngFor="let photo of photoService.photos; index as position">
+                <ion-img src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}"
+                         (click)="showActionSheet(photo, position)">
+                </ion-img>
+            </ion-thumbnail>
 
-            <ion-input placeholder="Bildunterschrift verfassen..."></ion-input>
+            <ion-textarea [ngStyle]="{'margin-left' : '10px'}" [autoGrow]="true" [(ngModel)]="imageText"
+                          placeholder="Schreiben Sie etwas...">
+            </ion-textarea>
         </ion-item>
-        <!--        </div>-->
+
 
         <ion-item>
             <ion-label>ANGELST DU GERADE HIER?</ion-label>
-            <ion-toggle></ion-toggle>
-        </ion-item>
-
-        <ion-item>
-            <ion-label type="number" position="floating">Floating Label</ion-label>
-            <ion-input></ion-input>
+            <ion-toggle [(ngModel)]="angelDuGeradeHier"></ion-toggle>
         </ion-item>
         <ion-item>
             <ion-label>GROESE</ion-label>
             <ion-input [ngStyle]="{'text-align' : 'right'}"
+                       [(ngModel)]="fischGroese"
                        type="tel"
                        maxlength="3"
                        minlength="1"
@@ -73,23 +64,19 @@
             <ion-label>phone</ion-label>
             <ion-input [ngStyle]="{'text-align' : 'right'}" type="tel" maxlength="3" clearInput></ion-input>
         </ion-item>
-
-
-        <!--    <ion-tabs>-->
-        <!--        <ion-tab-bar slot="bottom">-->
-        <!--            <ion-tab-button (click)="photoService.showGallery()">-->
-        <!--                <ion-icon name="images-outline"></ion-icon>-->
-        <!--                <ion-label></ion-label>-->
-        <!--            </ion-tab-button>-->
-
-        <!--            <ion-tab-button (click)="photoService.showCamera()">-->
-        <!--                <ion-icon name="camera-outline"></ion-icon>-->
-        <!--                <ion-label></ion-label>-->
-        <!--            </ion-tab-button>-->
-        <!--        </ion-tab-bar>-->
-        <!--    </ion-tabs>-->
-
     </ion-list>
-
-
 </ion-content>
+
+
+<ion-footer class="borderfooter">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button [ngStyle]="{'margin-left' : '15px', 'margin-right' : '10px'}" (click)="addPhotoFromCamera()">
+                <ion-icon name="camera"></ion-icon>
+            </ion-button>
+            <ion-button [ngStyle]="{'margin-left' : '10px', 'margin-right' : '10px'}" (click)="addPhotoFromGallery()">
+                <ion-icon name="folder"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-footer>
