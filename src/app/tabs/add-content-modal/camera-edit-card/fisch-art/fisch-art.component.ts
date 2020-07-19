@@ -7,35 +7,31 @@ import {Component, EventEmitter, OnInit} from '@angular/core';
 })
 export class FischArtComponent implements OnInit {
 
-    public items: any = [];
+    filterData: any[] = [];
+    itemsOriginal: any [] = [];
     searchTerm: string;
 
     constructor() {
-        this.items = [
-            {title: 'one'},
-            {title: 'two'},
-            {title: 'three'},
-            {title: 'four'},
-            {title: 'five'},
-            {title: 'six'}
-        ];
     }
 
     ngOnInit() {
+        this.itemsOriginal = [
+            {title: 'Aal'},
+            {title: 'Aland'},
+            {title: 'Amberjack'},
+            {title: 'Äsche'},
+            {title: 'five'},
+            {title: 'six'}
+        ];
+
+        this.filterData = this.itemsOriginal;
     }
 
-    searchBarInput($event: EventEmitter<CustomEvent>) {
-        // const query = event.target.value.toLowerCase();
-
-        return this.items.filter(item => {
-            return item.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
-        });
-
-    }
 
     setFilteredItems() {
-        return this.items.filter(item => {
+        this.filterData = this.itemsOriginal.filter(item => {
             return item.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
         });
+
     }
 }
