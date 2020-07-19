@@ -10,6 +10,7 @@ import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
 import {CameraService} from './camera.service';
 import {CameraEditCardComponent} from './camera-edit-card/camera-edit-card.component';
 import {FormsModule} from '@angular/forms';
+import {FischArtComponent} from './camera-edit-card/fisch-art/fisch-art.component';
 
 const routes: Routes = [
     {
@@ -17,6 +18,9 @@ const routes: Routes = [
     },
     {
         path: 'edit', component: CameraEditCardComponent,
+    },
+    {
+        path: 'fishArt', component: FischArtComponent,
     }
 ];
 
@@ -28,7 +32,7 @@ const routes: Routes = [
         FormsModule
     ],
 
-    declarations: [CameraPage, CameraEditCardComponent],
+    declarations: [CameraPage, CameraEditCardComponent, FischArtComponent],
     providers: [
     ],
 })

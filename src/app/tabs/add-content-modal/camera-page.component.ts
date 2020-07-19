@@ -74,7 +74,6 @@ export class CameraPage implements OnInit {
     // }
 
 
-
     ngOnInit() {
         // TODO: better use userId
         this.newsItemRef = this.afs.collection<NewsIten>('card');
@@ -148,5 +147,9 @@ export class CameraPage implements OnInit {
 
     addPhotoFromGallery() {
         this.photoService.pickImage(CameraSource.Photos);
+    }
+
+    navigateToFishArtPage() {
+        this.router.navigate(['tabs/camera/fishArt']);
     }
 }

@@ -23,7 +23,7 @@
     <ion-list>
         <ion-item>
             <ion-thumbnail *ngIf="photoService.photos.length <=0">
-                <ion-img src="../../../assets/icon/placeholder"></ion-img>
+                <ion-img src="../../../assets/icon/placeholder.jpg"></ion-img>
             </ion-thumbnail>
             <ion-thumbnail *ngFor="let photo of photoService.photos; index as position">
                 <ion-img src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}"
@@ -37,10 +37,16 @@
         </ion-item>
 
 
+        <ion-item (click)="navigateToFishArtPage()">
+            <ion-label><h3>FISCHART</h3></ion-label>
+            <!--            <ion-icon slot="start" name="arrow"></ion-icon>-->
+        </ion-item>
+
         <ion-item>
             <ion-label>ANGELST DU GERADE HIER?</ion-label>
             <ion-toggle [(ngModel)]="angelDuGeradeHier"></ion-toggle>
         </ion-item>
+
         <ion-item>
             <ion-label>GROESE</ion-label>
             <ion-input [ngStyle]="{'text-align' : 'right'}"
@@ -51,6 +57,7 @@
                        pattern="[0-9]"></ion-input>
             <ion-label [ngStyle]="{'margin-left' : '6px'}"> cm</ion-label>
         </ion-item>
+
         <ion-item>
             <ion-label>Fangzeit</ion-label>
             <ion-datetime displayFormat="D MMM YYYY H:mm"
