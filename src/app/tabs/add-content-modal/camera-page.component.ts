@@ -153,4 +153,8 @@ export class CameraPage implements OnInit {
     navigateToFishArtPage() {
         this.router.navigate(['fishArt'], {relativeTo: this.activatedRoute});
     }
+
+    navigateToAngelMethode() {
+        this.router.navigate(['angelmethode'], {relativeTo: this.activatedRoute});
+    }
 }
