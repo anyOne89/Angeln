@@ -7,7 +7,7 @@ import {UserService} from '../../core/services/user.service';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {FirebaseAddContentService} from '../../core/services/firebase-add-content.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 const {Camera, Filesystem, Storage} = Plugins;
 
@@ -26,7 +26,8 @@ export class CameraPage implements OnInit {
                 private userService: UserService,
                 public afs: AngularFirestore,
                 public loadingController: LoadingController,
-                private router: Router
+                private router: Router,
+                private activatedRoute: ActivatedRoute
     ) {
     }
 
@@ -150,6 +151,6 @@ export class CameraPage implements OnInit {
     }
 
     navigateToFishArtPage() {
-        this.router.navigate(['tabs/camera/fishArt']);
+        this.router.navigate(['fishArt'], {relativeTo: this.activatedRoute});
     }
 }

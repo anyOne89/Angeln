@@ -1,6 +1,14 @@
 <ion-header translucent>
     <ion-toolbar>
+
+
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
         <ion-title>Neuer Fang</ion-title>
+
+
 
         <ion-buttons slot="start">
             <ion-button (click)="close()">
@@ -39,7 +47,7 @@
 
         <ion-item (click)="navigateToFishArtPage()">
             <ion-label><h3>FISCHART</h3></ion-label>
-            <!--            <ion-icon slot="start" name="arrow"></ion-icon>-->
+            <ion-icon slot="end" name="chevron-forward"></ion-icon>
         </ion-item>
 
         <ion-item>
