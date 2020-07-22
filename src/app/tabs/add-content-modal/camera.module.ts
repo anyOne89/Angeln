@@ -11,6 +11,7 @@ import {CameraService} from './camera.service';
 import {CameraEditCardComponent} from './camera-edit-card/camera-edit-card.component';
 import {FormsModule} from '@angular/forms';
 import {FischArtComponent} from './camera-edit-card/fisch-art/fisch-art.component';
+import {SichtbarkeitComponent} from "./camera-edit-card/sichtbarkeit/sichtbarkeit.component";
 
 const routes: Routes = [
     {
@@ -32,7 +33,7 @@ const routes: Routes = [
         FormsModule
     ],
 
-    declarations: [CameraPage, CameraEditCardComponent, FischArtComponent],
+    declarations: [CameraPage, CameraEditCardComponent, FischArtComponent, SichtbarkeitComponent],
     providers: [
     ],
 })

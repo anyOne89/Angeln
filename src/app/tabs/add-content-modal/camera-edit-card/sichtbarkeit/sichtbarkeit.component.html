@@ -1,0 +1,38 @@
+<ion-header translucent>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title>Sichtbarkeit</ion-title>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+
+
+        <ion-radio-group (ionChange)="visibilityHandler($event)" value="biff">
+            <ion-list-header>
+                <ion-label>Sichtbarkeit</ion-label>
+            </ion-list-header>
+
+            <ion-item>
+                <ion-label>Öffentlich</ion-label>
+                <ion-radio slot="end" value="biff"></ion-radio>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>Standort privat</ion-label>
+                <ion-radio slot="end" value="griff"></ion-radio>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>Privat</ion-label>
+                <ion-radio slot="end" value="buford"></ion-radio>
+            </ion-item>
+
+        </ion-radio-group>
+    </ion-list>
+</ion-content>
